@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   return (
-    <div>
+    <div className="w-full">
       <div className="flex justify-between w-96">
         <div>
           <Navbar />
