@@ -2,6 +2,7 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
+import React from "react";
 
 const Home: React.FC = () => {
   const user = useSelector((state: any) => state.user);

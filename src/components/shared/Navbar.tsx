@@ -1,18 +1,21 @@
 import { setLogout } from "@/state";
 import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div>
+      <div>Moments</div>
+      <div className="flex flex-col">
+        <button onClick={() => navigate("/home")}>Home</button>
+        <button onClick={() => navigate("/profile")}>Profile</button>
+      </div>
       <div>
-        <div>Moments</div>
-        <div>Navigation</div>
-        <div>
-          <Button onClick={() => dispatch(setLogout())}>Logout</Button>
-        </div>
+        <Button onClick={() => dispatch(setLogout())}>Logout</Button>
       </div>
     </div>
   );
