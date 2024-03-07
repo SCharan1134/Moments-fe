@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const SideNavbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   return (
     <div>
-      <div>Moments</div>
       <div className="flex flex-col">
         <button onClick={() => navigate("/home")}>Home</button>
         <button onClick={() => navigate("/profile")}>Profile</button>
@@ -21,4 +20,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default SideNavbar;

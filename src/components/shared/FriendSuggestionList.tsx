@@ -26,7 +26,6 @@ const FriendSuggestionList = () => {
             },
           }
         );
-        console.log("hi");
         setFriends(response.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
