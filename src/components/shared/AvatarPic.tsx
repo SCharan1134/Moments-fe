@@ -11,8 +11,8 @@ const AvatarPic = () => {
           src={`http://localhost:3001/avatar/${avatarPath}`}
           className="rounded-full h-10 w-10"
         />
-        <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400 p-1">
-          {userName.substring(0, 2)}
+        <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400  p-2">
+          {userName.substring(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
     </div>
