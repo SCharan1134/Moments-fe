@@ -35,6 +35,7 @@ const CreateMoment: React.FC = () => {
           },
         }
       );
+
       console.log("Moment posted:", response.data);
     } catch (error) {
       console.error("Error posting moment:", error);
@@ -42,7 +43,7 @@ const CreateMoment: React.FC = () => {
   };
 
   return (
-    <div >
+    <div>
       <Formik
         initialValues={{
           description: "",
@@ -55,7 +56,7 @@ const CreateMoment: React.FC = () => {
         }}
       >
         {({ setFieldValue }) => (
-          <Form >
+          <Form>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"

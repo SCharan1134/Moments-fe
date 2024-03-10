@@ -1,27 +1,63 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface User {
+  // Define your user object structure here
+}
+
+interface Moment {
+  userId: string;
+  description?: string;
+  momentPath?: string;
+  likes: Map<string, boolean>;
+  visibility: "public" | "private" | "friends";
+  comments: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+}
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  moments: Moment[];
+}
+
+const initialState: AuthState = {
   user: null,
   token: null,
+  moments: [],
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setLogin: (state, action) => {
+    setLogin: (state, action: PayloadAction<{ user: User; token: string }>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+      state.moments = [];
     },
-    changeUserDetails: (state, action) => {
+    changeUserDetails: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
+    },
+    setMoments: (state, action: PayloadAction<{ moments: Moment[] }>) => {
+      state.moments = action.payload.moments;
+    },
+    setMoment: (state, action: PayloadAction<{ moment: Moment }>) => {
+      const updatedMoments = state.moments.map((moment) => {
+        if (moment._id === action.payload.moment._id)
+          return action.payload.moment;
+        return moment;
+      });
+      state.moments = updatedMoments;
     },
   },
 });
 
-export const { setLogin, setLogout, changeUserDetails } = authSlice.actions;
+export const { setLogin, setLogout, changeUserDetails, setMoments, setMoment } =
+  authSlice.actions;
 export default authSlice.reducer;
