@@ -12,17 +12,17 @@ const SideNavbar = () => {
 
   return (
     <div>
-  <div className="flex flex-col justify-center items-start gap-10 px-20 py-10">
+  <div className="text-xl flex flex-col justify-center items-start gap-10 px-10 py-10">
     <button className="flex items-center" onClick={() => navigate("/home")}>
-      <FaHome className="mr-2" /> 
+      <FaHome size = {30} className="mr-2" /> 
       Home
     </button>
     <button className="flex items-center" onClick={() => navigate("/messages")}>
-      <FaEnvelope className="mr-2" /> 
+      <FaEnvelope size = {30} className="mr-2" /> 
       Messages
     </button>
     <button className="flex items-center" onClick={() => navigate("/profile")}>
-      <FaUser className="mr-2" /> 
+      <FaUser size = {30} className="mr-2" /> 
       Profile
     </button>
   </div> 

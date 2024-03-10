@@ -42,7 +42,7 @@ const CreateMoment: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div >
       <Formik
         initialValues={{
           description: "",
@@ -55,7 +55,7 @@ const CreateMoment: React.FC = () => {
         }}
       >
         {({ setFieldValue }) => (
-          <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <Form >
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
