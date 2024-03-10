@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/state";
 import { DropdownMenuGroup } from "../ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import Notification from "./Notification";
 
 const TopNavbar = () => {
   const { userName } = useSelector((state: any) => state.user);
@@ -24,7 +25,9 @@ const TopNavbar = () => {
         Moments
       </div>
       <div className="flex gap-20 items-center">
-        <div>Notifications</div>
+        <div>
+          <Notification />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <AvatarPic />
@@ -43,7 +46,7 @@ const TopNavbar = () => {
                 className="py-1 cursor-pointer"
                 onClick={() => navigate("/settings")}
               >
-                Settings
+                Edit Profile
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
