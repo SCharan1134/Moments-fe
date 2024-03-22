@@ -4,16 +4,20 @@ import {
   BookmarkIcon,
   ChatBubbleIcon,
   DotsVerticalIcon,
+  HeartFilledIcon,
   HeartIcon,
 } from "@radix-ui/react-icons";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setMoment } from "@/state";
 
 interface MomentProps {
-  userId: string;
+  postId: string;
+  postUserId: string;
   momentPath?: string;
   description?: string;
   visibility: "public" | "private" | "friends";
+  likes: Map<string, boolean>;
 }
 interface FriendData {
   _id: string;
@@ -22,27 +26,38 @@ interface FriendData {
 }
 
 const Moment: React.FC<MomentProps> = ({
-  userId,
+  postId,
+  postUserId,
   momentPath,
   description,
   visibility,
+  likes,
 }) => {
+  const dispatch = useDispatch();
+
   const [friendData, setFriendData] = useState<FriendData>();
   const token = useSelector((state: any) => state.token);
   const [isloading, setIsLoading] = useState(true);
+  const loggedInUserId = useSelector((state: any) => state.user._id);
+  const isLiked =
+    likes instanceof Map // Check if likes is a Map
+      ? likes.has(loggedInUserId) // If so, use Map methods
+      : typeof likes === "object" && // Otherwise, if it's an object
+        loggedInUserId in likes && // Check if loggedInUserId exists in it
+        Boolean(likes[loggedInUserId]);
+
+  const likeCount = Object.keys(likes).length;
 
   const fetchData = async () => {
-    console.log("loading");
     try {
       const response = await axios.get(
-        `http://localhost:3001/users/${userId}`,
+        `http://localhost:3001/users/${postUserId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      // console.log("response", response.data);
       setFriendData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -50,17 +65,33 @@ const Moment: React.FC<MomentProps> = ({
     }
   };
   useEffect(() => {
-    if (userId) {
+    if (postUserId) {
       fetchData();
     }
   }, []);
+
+  const patchLike = async () => {
+    const response = await axios.patch(
+      `http://localhost:3001/moments/${postId}/like`,
+      { userId: loggedInUserId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch(setMoment({ moment: response.data }));
+  };
+
   return (
-    <div className="flex flex-col py-4 px-4 border m-2 rounded-lg">
+    <div className="py-4 px-4 border border-black  rounded-2xl bg-moment w-[500px] h-[600px]">
       {isloading ? (
         <div>Loading</div>
       ) : (
-        <>
-          <div className="flex items-center justify-between gap-3 ">
+        <div className="flex flex-col items-center   ">
+          <div className="flex w-full pl-2 items-center justify-between gap-3 ">
             <div className="flex items-center gap-3">
               <Avatar>
                 <AvatarImage
@@ -77,25 +108,28 @@ const Moment: React.FC<MomentProps> = ({
             </div>
             <DotsVerticalIcon className="h-6 w-6" />
           </div>
-          <div>{description}</div>
-          <div className="mt-2 bg-red-300 ">
-            <img src={`http://localhost:3001/moments/${momentPath}`} />
+          <div className="mt-2">
+            <img
+              src={`http://localhost:3001/moments/${momentPath}`}
+              className="rounded-lg w-[450px] h-[450px]"
+            />
           </div>
-          <div className="flex justify-between px-10 py-5">
-            <div className="flex items-center justify-center gap-2">
-              <HeartIcon />
-              <div>Like</div>
+          <div className="w-full pl-5">{description}</div>
+
+          <div className="flex justify-between w-full px-10 py-5 pl-5">
+            <div
+              className="flex items-center justify-center gap-2 cursor-pointer"
+              onClick={patchLike}
+            >
+              {isLiked ? <HeartFilledIcon /> : <HeartIcon />}
+
+              <div>{likeCount}</div>
             </div>
             <div className="flex items-center justify-center gap-2">
               <ChatBubbleIcon />
-              <div>Comment</div>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <BookmarkIcon />
-              <div>Save</div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -12,12 +12,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { loginDetails } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setLogin } from "@/state";
 import { useDispatch } from "react-redux";
+import { useToast } from "@/components/ui/use-toast";
 
 const loginDetails = z.object({
   email: z.string().email(),
@@ -30,6 +30,8 @@ const signinForm = () => {
   const dispatch = useDispatch();
   const isloading = false;
   const navigate = useNavigate();
+  const { toast } = useToast();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof loginDetails>>({
     resolver: zodResolver(loginDetails),
@@ -57,9 +59,19 @@ const signinForm = () => {
             token: loggedIn.token,
           })
         );
+        toast({
+          duration: 2000,
+          description: "log in successfully",
+        });
         navigate("/home");
       }
     } catch (error) {
+      toast({
+        duration: 2000,
+        variant: "destructive",
+        description: "error in log in",
+      });
+
       console.error("error posting data", error);
     }
   }

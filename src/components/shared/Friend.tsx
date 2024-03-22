@@ -3,6 +3,8 @@ import { Avatar } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
+
 import { useState } from "react";
 
 interface FriendProps {
@@ -12,6 +14,7 @@ interface FriendProps {
 }
 
 const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
+  const { toast } = useToast();
   const { _id } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const [isSent, setIsSent] = useState(false);
@@ -30,6 +33,10 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
           }
         );
         setIsSent(true);
+        toast({
+          duration: 2000,
+          description: response.data.message,
+        });
         console.log("friend request sent", response);
       } else {
         const response = await axios.patch(
@@ -43,9 +50,18 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
           }
         );
         setIsSent(false);
+        toast({
+          duration: 2000,
+          description: response.data.message,
+        });
         console.log("friend request removed", response);
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast({
+        duration: 2000,
+        variant: "destructive",
+        description: error?.response.data.message,
+      });
       console.error("Error submitting form:", error);
     }
   };

@@ -1,4 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
 
 const AuthLayout = () => {
   const isAuthenticated = false;
@@ -11,6 +12,7 @@ const AuthLayout = () => {
           <Outlet />
         </section>
       )}
+      <Toaster />
     </>
   );
 };

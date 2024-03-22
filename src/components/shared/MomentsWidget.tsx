@@ -23,10 +23,9 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log(response.data);
+    console.log(response.data);
 
     dispatch(setMoments({ moments: response.data }));
-    console.log(moments);
   };
 
   const getUserMoments = async () => {
@@ -49,14 +48,16 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
     }
   }, []);
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center gap-10">
       {moments.map((moment: any) => (
         <Moment
+          postId={moment._id}
           key={moment._id}
-          userId={moment.userId}
+          postUserId={moment.userId}
           momentPath={moment.momentPath}
           description={moment.description}
           visibility={moment.visibility}
+          likes={moment.likes}
         />
       ))}
     </div>

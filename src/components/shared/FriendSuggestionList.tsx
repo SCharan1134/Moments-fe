@@ -26,7 +26,7 @@ const FriendSuggestionList = () => {
             },
           }
         );
-        console.log(response.data)
+        console.log(response.data);
         setFriends(response.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -35,15 +35,19 @@ const FriendSuggestionList = () => {
     fetchFriends();
   }, []);
   return (
-    <div>
-      {friends.map((friend) => (
-        <Friend
-          key={friend._id}
-          userid={friend.userName}
-          avatarpath={friend.avatarPath}
-          friendId={friend._id}
-        />
-      ))}
+    <div className="flex flex-col items-start w-full py-5">
+      <div className="text-lg font-semibold pb-2">Suggestions</div>
+      <div className="w-full">
+        {friends.map((friend) => (
+          <Friend
+            key={friend._id}
+            userid={friend.userName}
+            avatarpath={friend.avatarPath}
+            friendId={friend._id}
+          />
+        ))}
+      </div>
+      <div className="text-md font-semibold pb-2 text-gray-400">See all</div>
     </div>
   );
 };

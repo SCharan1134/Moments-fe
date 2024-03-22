@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import FriendRequest from "./FriendRequest";
+import { FaBell, FaRegBell } from "react-icons/fa";
 
 const Notification = () => {
   const { _id } = useSelector((state: any) => state.user);
@@ -56,8 +57,10 @@ const Notification = () => {
 
   return (
     <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)}>
-      <DropdownMenuTrigger>Notifications</DropdownMenuTrigger>
-      <DropdownMenuContent className="w-74">
+      <DropdownMenuTrigger className="flex justify-center items-center">
+        <FaRegBell className="h-6 w-6" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-74 bg-secondary">
         {pendingRequest.length > 0 && (
           <>
             <DropdownMenuLabel>Pending Requests</DropdownMenuLabel>

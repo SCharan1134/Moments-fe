@@ -18,8 +18,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import Modal from "@/components/shared/Modal";
+import { useToast } from "@/components/ui/use-toast";
 
 const SignupForm = () => {
+  const { toast } = useToast();
+
   const isloading = false;
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -46,8 +49,17 @@ const SignupForm = () => {
       if (response.data) {
         setUserId(response.data._id);
         setShowModal(true);
+        toast({
+          duration: 2000,
+          description: response.data.message,
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast({
+        duration: 2000,
+        variant: "destructive",
+        description: error?.response.data.error,
+      });
       console.error("error posting data", error);
     }
   }
