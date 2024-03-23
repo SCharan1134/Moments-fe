@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMoment } from "@/state";
+import { useNavigate } from "react-router-dom";
 
 interface MomentProps {
   postId: string;
@@ -47,6 +48,7 @@ const Moment: React.FC<MomentProps> = ({
         Boolean(likes[loggedInUserId]);
 
   const likeCount = Object.keys(likes).length;
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -92,7 +94,10 @@ const Moment: React.FC<MomentProps> = ({
       ) : (
         <div className="flex flex-col items-center   ">
           <div className="flex w-full pl-2 items-center justify-between gap-3 ">
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => navigate(`/profile/${friendData?._id}`)}
+            >
               <Avatar>
                 <AvatarImage
                   src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}

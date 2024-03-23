@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const user = useSelector((state: any) => state.user);
-  const token = useSelector((state: any) => state.token);
   const [isFriend, setIsFriend] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {

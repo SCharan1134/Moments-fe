@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import FriendRequest from "./FriendRequest";
-import { FaBell, FaRegBell } from "react-icons/fa";
+import { FaRegBell } from "react-icons/fa";
 
 const Notification = () => {
   const { _id } = useSelector((state: any) => state.user);
@@ -24,11 +24,14 @@ const Notification = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/users/${_id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:3001/users/${_id}/notification`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.data.friendRequests) {
           setFriendRequests(response.data.friendRequests);
           console.log("friendRequests", friendRequests);

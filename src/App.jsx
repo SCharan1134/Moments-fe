@@ -24,6 +24,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/temp" element={<FriendSuggestionList />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

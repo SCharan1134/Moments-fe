@@ -6,6 +6,7 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface FriendProps {
   userid: string;
@@ -18,6 +19,7 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
   const { _id } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const [isSent, setIsSent] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddFriend = async () => {
     try {
@@ -67,7 +69,10 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
   };
   return (
     <div className="flex w-full justify-between items-center px-2 py-1">
-      <div className="flex items-start gap-3">
+      <div
+        className="flex items-start gap-3 cursor-pointer"
+        onClick={() => navigate(`/profile/${friendId}`)}
+      >
         <Avatar>
           <AvatarImage src={`http://localhost:3001/avatar/${avatarpath}`} />
           <AvatarFallback>

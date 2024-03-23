@@ -19,6 +19,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
   refreshKey,
 }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const moments = useSelector((state: any) => state.moments);
   const [key, setKey] = useState(0);
@@ -52,7 +53,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
 
   const getUserMoments = async () => {
     const response = await axios.get(
-      `http://localhost:3001/moments/${userId}/moments`,
+      `http://localhost:3001/moments/${userId}/${user._id}/moments`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
