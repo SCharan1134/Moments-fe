@@ -9,6 +9,7 @@ interface MomentsWidgetProps {
   isProfile?: boolean;
   isAll?: boolean;
   isFriends?: boolean;
+  isArchive?: boolean;
   refreshKey?: any;
 }
 
@@ -16,6 +17,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
   userId,
   isProfile = false,
   isFriends = false,
+  isArchive = false,
   refreshKey,
 }) => {
   const dispatch = useDispatch();
@@ -25,53 +27,90 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
   const [key, setKey] = useState(0);
 
   const getMoments = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/moments/${userId}/feed`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(response.data);
+    try {
+      // if (userId) {
+      console.log(userId);
+      const response = await axios.get(
+        `http://localhost:3001/moments/${userId}/feed`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response.data);
 
-    dispatch(setMoments({ moments: response.data }));
+      dispatch(setMoments({ moments: response.data }));
+      // }
+    } catch (error) {
+      console.log("error while getting user moments", error);
+    }
   };
+
   const getFriendMoments = async () => {
+    try {
+      if (userId) {
+        const response = await axios.get(
+          `http://localhost:3001/moments/${userId}/feed/friend`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        dispatch(setMoments({ moments: response.data }));
+      }
+    } catch (error) {
+      console.log("error while getting user moments", error);
+    }
+  };
+
+  const getArchiveMoments = async () => {
     const response = await axios.get(
-      `http://localhost:3001/moments/${userId}/feed/friend`,
+      `http://localhost:3001/moments/${userId}/archive`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log(response.data);
+    // console.log(response);
 
     dispatch(setMoments({ moments: response.data }));
   };
 
   const getUserMoments = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/moments/${userId}/${user._id}/moments`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    try {
+      if (userId) {
+        const response = await axios.get(
+          `http://localhost:3001/moments/${userId}/${user._id}/moments`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(setMoments({ moments: response.data }));
       }
-    );
-    dispatch(setMoments({ moments: response.data }));
+    } catch (error) {
+      console.log("error while getting user moments", error);
+    }
   };
 
   useEffect(() => {
+    if (isArchive) {
+      getArchiveMoments();
+    }
     if (isProfile) {
       getUserMoments();
     } else if (isFriends) {
+      console.log("refresh key");
       getFriendMoments();
     } else {
       getMoments();
     }
-  }, [isProfile, isFriends, userId, token, refreshKey]);
+  }, [isProfile, isFriends, userId, token, refreshKey, isArchive, key]);
 
   useEffect(() => {
     // When refreshKey changes, update the local key state to trigger a re-render
@@ -90,6 +129,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
             description={moment.description}
             visibility={moment.visibility}
             likes={moment.likes}
+            isArchive={moment.isArchive}
           />
         ))
       ) : (

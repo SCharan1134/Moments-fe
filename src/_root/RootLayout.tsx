@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import CreateMoment from "@/components/shared/CreateMoment";
 import { useEffect, useState } from "react";
+import CreateMemory from "@/components/shared/CreateMemory";
 
 const RootLayout = () => {
   const [isCreateMomentOpen, setIsCreateMomentOpen] = useState(false);

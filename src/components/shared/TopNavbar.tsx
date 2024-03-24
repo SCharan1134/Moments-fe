@@ -20,7 +20,7 @@ interface TopNavbarProps {
 }
 
 const TopNavbar: React.FC<TopNavbarProps> = ({ openCreateMomentModal }) => {
-  const { userName } = useSelector((state: any) => state.user);
+  const { userName, _id } = useSelector((state: any) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ openCreateMomentModal }) => {
             <DropdownMenuGroup>
               <DropdownMenuItem
                 className="py-1 cursor-pointer"
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate(`/profile/${_id}`)}
               >
                 Profile
               </DropdownMenuItem>

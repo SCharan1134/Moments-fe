@@ -40,7 +40,7 @@ const SideNavbar = () => {
         </button>
         <button
           className="flex items-center"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate("/settings")}
         >
           {/* <FaUser size={30} className="mr-2" />p */}
           Settings

@@ -11,6 +11,13 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMoment } from "@/state";
 import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { useToast } from "../ui/use-toast";
 
 interface MomentProps {
   postId: string;
@@ -19,6 +26,7 @@ interface MomentProps {
   description?: string;
   visibility: "public" | "private" | "friends";
   likes: Map<string, boolean>;
+  isArchive: Boolean;
 }
 interface FriendData {
   _id: string;
@@ -33,6 +41,7 @@ const Moment: React.FC<MomentProps> = ({
   description,
   visibility,
   likes,
+  isArchive,
 }) => {
   const dispatch = useDispatch();
 
@@ -49,6 +58,7 @@ const Moment: React.FC<MomentProps> = ({
 
   const likeCount = Object.keys(likes).length;
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const fetchData = async () => {
     try {
@@ -87,6 +97,75 @@ const Moment: React.FC<MomentProps> = ({
     dispatch(setMoment({ moment: response.data }));
   };
 
+  const deleteMoment = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/moments/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({
+        duration: 2000,
+        description: response.data.message,
+      });
+      console.log(response.data);
+    } catch (err) {
+      console.error("Error deleting moment", err);
+    }
+  };
+
+  const addArchive = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("userId", postUserId);
+      formData.append("momentId", postId);
+      const response = await axios.post(
+        `http://localhost:3001/moments/archive/add`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({
+        duration: 2000,
+        description: response.data.message,
+      });
+    } catch (err) {
+      console.error("Error archiving moment", err);
+    }
+  };
+
+  const removeArchive = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("userId", postUserId);
+      formData.append("momentId", postId);
+      const response = await axios.post(
+        `http://localhost:3001/moments/archive/remove`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({
+        duration: 2000,
+        description: response.data.message,
+      });
+    } catch (err) {
+      console.error("Error archiving moment", err);
+    }
+  };
+
   return (
     <div className="py-4 px-4 border border-black  rounded-2xl bg-moment w-[500px] h-[600px]">
       {isloading ? (
@@ -111,7 +190,41 @@ const Moment: React.FC<MomentProps> = ({
                 <p className="text-xs">{visibility}</p>
               </div>
             </div>
-            <DotsVerticalIcon className="h-6 w-6" />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <DotsVerticalIcon className="h-6 w-6" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-secondary py-5 px-3 flex flex-col gap-3 border border-black rounded-lg">
+                <DropdownMenuItem className="hover:text-primary">
+                  Add to favorites
+                </DropdownMenuItem>
+                {loggedInUserId == postUserId && (
+                  <>
+                    {isArchive ? (
+                      <DropdownMenuItem
+                        className="hover:text-primary"
+                        onClick={removeArchive}
+                      >
+                        remove archive
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem
+                        className="hover:text-primary"
+                        onClick={addArchive}
+                      >
+                        archive
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem
+                      className="hover:text-black text-red-600"
+                      onClick={deleteMoment}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="mt-2">
             <img

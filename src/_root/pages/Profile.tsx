@@ -17,6 +17,7 @@ interface User {
 
 const ProfilePage = () => {
   const { userId } = useParams();
+  const userIdString = userId ? String(userId) : "";
   const token = useSelector((state: any) => state.token);
 
   const currentUser = useSelector((state: any) => state.user);
@@ -32,9 +33,15 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCurrent, setIsCurrent] = useState(false);
   const [isfriends, setIsFriends] = useState(false);
+  const [isarchive, setIsarchive] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const moments = useSelector((state: any) => state.moments);
 
   useEffect(() => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  }, [isarchive]);
+
+  const fetchUser = async () => {
     setIsLoading(true);
     axios
       .get(`http://localhost:3001/users/${userId}`, {
@@ -50,7 +57,12 @@ const ProfilePage = () => {
         console.error("Error fetching data:", error);
         setIsLoading(true);
       });
-    console.log(currentUser);
+
+    return "completed";
+  };
+
+  useEffect(() => {
+    console.log(fetchUser());
     if (userId == currentUser._id) {
       setIsCurrent(true);
     } else {
@@ -59,8 +71,7 @@ const ProfilePage = () => {
     if (user.friends.includes(currentUser._id)) {
       setIsFriends(true);
     }
-    console.log(isfriends);
-  }, [userId, token]);
+  }, [userId, token, isarchive]);
 
   return (
     <div className="flex w-full items-start ">
@@ -70,9 +81,11 @@ const ProfilePage = () => {
             {isCurrent ? (
               <>
                 <MomentsWidget
-                  userId={user._id}
+                  userId={currentUser._id}
                   isProfile={true}
                   isFriends={false}
+                  isArchive={isarchive}
+                  refreshKey={refreshKey}
                 />
               </>
             ) : (
@@ -106,6 +119,15 @@ const ProfilePage = () => {
               <div className="text-lg">Friends</div>
               <div className="text-md font-semibold">{user.friends.length}</div>
             </div>
+            {isCurrent && (
+              <Button
+                onClick={() => {
+                  setIsarchive(!isarchive);
+                }}
+              >
+                {isarchive ? "view all" : "view archive"}
+              </Button>
+            )}
             {!isCurrent && (
               <div className="flex w-1/2 items-center justify-between">
                 <Button>{isfriends ? "remove" : "add friend"}</Button>

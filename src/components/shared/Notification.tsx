@@ -34,12 +34,12 @@ const Notification = () => {
         );
         if (response.data.friendRequests) {
           setFriendRequests(response.data.friendRequests);
-          console.log("friendRequests", friendRequests);
+          // console.log("friendRequests", friendRequests);
           // console.log("console", response.data.friendRequests);
         }
         if (response.data.pendingFriends) {
           setPendingRequest(response.data.pendingFriends);
-          console.log("pendingRequest", pendingRequest);
+          // console.log("pendingRequest", pendingRequest);
           // console.log("console", response.data.friendRequests);
         }
         // console.log(response.data.friendRequests);
