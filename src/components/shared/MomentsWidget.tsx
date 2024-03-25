@@ -130,6 +130,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
             visibility={moment.visibility}
             likes={moment.likes}
             isArchive={moment.isArchive}
+            getArchive={getArchiveMoments}
           />
         ))
       ) : (

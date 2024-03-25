@@ -96,7 +96,7 @@ const ProfilePage = () => {
               />
             )}
           </div>
-          <div className="w-[650px] border-l border-black sticky top-0 h-screen px-5 py-5">
+          <div className="w-[650px] w-max-[650px] border-l border-black sticky top-0 h-screen px-5 py-5">
             <div className="rounded-2xl relative">
               {user.avatarPath == " " ? (
                 <div className="rounded-2xl w-full h-72 flex items-center justify-center border-2">
@@ -115,25 +115,31 @@ const ProfilePage = () => {
                 <div>Moments</div>
               </div>
             </div>
-            <div className="py-3 flex items-center gap-2">
-              <div className="text-lg">Friends</div>
-              <div className="text-md font-semibold">{user.friends.length}</div>
-            </div>
-            {isCurrent && (
-              <Button
-                onClick={() => {
-                  setIsarchive(!isarchive);
-                }}
-              >
-                {isarchive ? "view all" : "view archive"}
-              </Button>
-            )}
-            {!isCurrent && (
-              <div className="flex w-1/2 items-center justify-between">
-                <Button>{isfriends ? "remove" : "add friend"}</Button>
-                <Button>Message</Button>
+            <div className="py-3 px-3 ">
+              <div className="flex flex-col">
+                <div className="text-2xl font-semibold">{user?.userName}</div>
+                <div className="flex items-center gap-2">
+                  <div className="text-md">Friends</div>
+                  <div className="text-md font-semibold">
+                    {user.friends.length}
+                  </div>
+                </div>
               </div>
-            )}
+              {isCurrent && (
+                <Button
+                  onClick={() => {
+                    setIsarchive(!isarchive);
+                  }}
+                >
+                  {isarchive ? "view all" : "view archive"}
+                </Button>
+              )}
+              {!isCurrent && (
+                <div className="flex w-1/2 items-center justify-between">
+                  <Button>{isfriends ? "remove" : "add friend"}</Button>
+                </div>
+              )}
+            </div>
           </div>
         </>
       ) : (

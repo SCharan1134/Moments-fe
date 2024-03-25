@@ -12,6 +12,9 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import FriendRequest from "./FriendRequest";
 import { FaRegBell } from "react-icons/fa";
+// import io from "socket.io-client";
+
+// const socket = io("http://localhost:3001");
 
 const Notification = () => {
   const { _id } = useSelector((state: any) => state.user);
@@ -20,6 +23,19 @@ const Notification = () => {
   const [pendingRequest, setPendingRequest] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
+
+  // useEffect(() => {
+  //   socket.on("notification", (data) => {
+  //     console.log("Received notification:", data.message);
+  //     // Handle the notification
+  //     // You might update the state or show a notification popup here
+  //   });
+  //   console.log(socket);
+  //   // Clean up event listener when component unmounts
+  //   return () => {
+  //     socket.off("notification");
+  //   };
+  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +48,7 @@ const Notification = () => {
             },
           }
         );
+        console.log(response.data);
         if (response.data.friendRequests) {
           setFriendRequests(response.data.friendRequests);
           // console.log("friendRequests", friendRequests);
@@ -48,14 +65,7 @@ const Notification = () => {
       }
     };
 
-    // Call the API initially when the component mounts
     fetchData();
-
-    // Set up an interval to fetch data every 5 seconds (for example)
-    // const intervalId = setInterval(fetchData, 5000);
-
-    // // Clean up the interval on component unmount
-    // return () => clearInterval(intervalId);
   }, [isOpen]);
 
   return (
@@ -70,7 +80,7 @@ const Notification = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               {pendingRequest.map((pend) => (
-                <PendingRequest friendId={pend} />
+                <PendingRequest friendId={pend} key={pend} />
               ))}
             </DropdownMenuItem>
             <DropdownMenuSeparator />

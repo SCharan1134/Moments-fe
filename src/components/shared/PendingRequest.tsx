@@ -19,7 +19,7 @@ const PendingRequest = ({ friendId }: any) => {
   useEffect(() => {
     const fetchFriendData = async () => {
       try {
-        console.log("hi");
+        // console.log("hi");
         const response = await axios.get(
           `http://localhost:3001/users/${friendId}`,
           {

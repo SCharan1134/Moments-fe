@@ -27,6 +27,7 @@ interface MomentProps {
   visibility: "public" | "private" | "friends";
   likes: Map<string, boolean>;
   isArchive: Boolean;
+  getArchive?: () => void;
 }
 interface FriendData {
   _id: string;
@@ -42,6 +43,7 @@ const Moment: React.FC<MomentProps> = ({
   visibility,
   likes,
   isArchive,
+  getArchive,
 }) => {
   const dispatch = useDispatch();
 
@@ -161,6 +163,9 @@ const Moment: React.FC<MomentProps> = ({
         duration: 2000,
         description: response.data.message,
       });
+      if (getArchive) {
+        getArchive();
+      }
     } catch (err) {
       console.error("Error archiving moment", err);
     }
