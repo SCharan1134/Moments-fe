@@ -2,6 +2,7 @@ import MomentsWidget from "@/components/shared/MomentsWidget";
 import { useSelector } from "react-redux";
 import FriendSuggestionList from "@/components/shared/FriendSuggestionList";
 import { useEffect, useState } from "react";
+import MemoryWidget from "@/components/shared/MemoryWidget";
 // import MemoryWidget from "@/components/shared/MemoryWidget";
 
 const Home: React.FC = () => {
@@ -41,8 +42,8 @@ const Home: React.FC = () => {
         />
       </div>
       <div className="w-[650px] w-max-[650px] border-l border-black sticky top-0 h-screen px-2">
-        <FriendSuggestionList />
         {/* <MemoryWidget /> */}
+        <FriendSuggestionList />
       </div>
     </div>
   );

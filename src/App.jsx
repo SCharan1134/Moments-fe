@@ -1,6 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import SigninForm from "./_auth/forms/SigninForm";
-import { Home, NotFound, ProfilePage, Settings } from "./_root/pages";
+import {
+  Home,
+  MomentPage,
+  NotFound,
+  ProfilePage,
+  Settings,
+} from "./_root/pages";
 import SignupForm from "./_auth/forms/SignupForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
@@ -25,6 +31,7 @@ function App() {
           <Route path="/temp" element={<FriendSuggestionList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/moment/:momentId" element={<MomentPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

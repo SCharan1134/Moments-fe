@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
-  BookmarkIcon,
   ChatBubbleIcon,
   DotsVerticalIcon,
   HeartFilledIcon,
@@ -9,14 +8,14 @@ import {
 } from "@radix-ui/react-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setMoment } from "@/state";
+import { changeUserDetails, setMoment } from "@/state";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "../ui/dropdown-menu";
 import { useToast } from "../ui/use-toast";
 
 interface MomentProps {
@@ -26,6 +25,7 @@ interface MomentProps {
   description?: string;
   visibility: "public" | "private" | "friends";
   likes: Map<string, boolean>;
+  comments: [];
   isArchive: Boolean;
   getArchive?: () => void;
 }
@@ -42,15 +42,18 @@ const Moment: React.FC<MomentProps> = ({
   description,
   visibility,
   likes,
+  comments,
   isArchive,
   getArchive,
 }) => {
   const dispatch = useDispatch();
-
   const [friendData, setFriendData] = useState<FriendData>();
   const token = useSelector((state: any) => state.token);
   const [isloading, setIsLoading] = useState(true);
   const loggedInUserId = useSelector((state: any) => state.user._id);
+  const favorites = useSelector((state: any) => state.user.favoriteMoments);
+  const isfavorite =
+    favorites.find((favorite: any) => favorite === postId) !== undefined;
   const isLiked =
     likes instanceof Map // Check if likes is a Map
       ? likes.has(loggedInUserId) // If so, use Map methods
@@ -59,6 +62,7 @@ const Moment: React.FC<MomentProps> = ({
         Boolean(likes[loggedInUserId]);
 
   const likeCount = Object.keys(likes).length;
+  const commentCount = comments?.length ?? 0;
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -170,6 +174,67 @@ const Moment: React.FC<MomentProps> = ({
       console.error("Error archiving moment", err);
     }
   };
+  const addFavorite = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("userId", postUserId);
+      formData.append("momentId", postId);
+      const response = await axios.post(
+        `http://localhost:3001/moments/favorite/add`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({
+        duration: 2000,
+        description: response.data.message,
+      });
+      if (response.data.user) {
+        dispatch(
+          changeUserDetails({
+            user: response.data.user,
+          })
+        );
+      }
+    } catch (err) {
+      console.error("Error favorite moment", err);
+    }
+  };
+
+  const removeFavorite = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("userId", postUserId);
+      formData.append("momentId", postId);
+      const response = await axios.post(
+        `http://localhost:3001/moments/favorite/remove`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({
+        duration: 2000,
+        description: response.data.message,
+      });
+      if (response.data.user) {
+        dispatch(
+          changeUserDetails({
+            user: response.data.user,
+          })
+        );
+      }
+    } catch (err) {
+      console.error("Error favorite moment", err);
+    }
+  };
 
   return (
     <div className="py-4 px-4 border border-black  rounded-2xl bg-moment w-[500px] h-[600px]">
@@ -200,8 +265,26 @@ const Moment: React.FC<MomentProps> = ({
                 <DotsVerticalIcon className="h-6 w-6" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-secondary py-5 px-3 flex flex-col gap-3 border border-black rounded-lg">
-                <DropdownMenuItem className="hover:text-primary">
-                  Add to favorites
+                {isfavorite ? (
+                  <DropdownMenuItem
+                    className="hover:text-primary"
+                    onClick={removeFavorite}
+                  >
+                    remove favorites
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    className="hover:text-primary"
+                    onClick={addFavorite}
+                  >
+                    add favorites
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="hover:text-primary"
+                  onClick={() => navigate(`/moment/${postId}`)}
+                >
+                  got to moment
                 </DropdownMenuItem>
                 {loggedInUserId == postUserId && (
                   <>
@@ -249,7 +332,8 @@ const Moment: React.FC<MomentProps> = ({
               <div>{likeCount}</div>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <ChatBubbleIcon />
+              <ChatBubbleIcon onClick={() => navigate(`/moment/${postId}`)} />
+              {commentCount}
             </div>
           </div>
         </div>

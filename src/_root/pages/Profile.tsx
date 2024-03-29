@@ -17,7 +17,6 @@ interface User {
 
 const ProfilePage = () => {
   const { userId } = useParams();
-  const userIdString = userId ? String(userId) : "";
   const token = useSelector((state: any) => state.token);
 
   const currentUser = useSelector((state: any) => state.user);
