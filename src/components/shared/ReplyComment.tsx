@@ -1,12 +1,8 @@
-import {
-  DotsHorizontalIcon,
-  HeartFilledIcon,
-  HeartIcon,
-} from "@radix-ui/react-icons";
+import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCommentById, setComment } from "@/state";
+import { deleteCommentById } from "@/state";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CustomComment from "./CustomComment";
@@ -73,11 +69,11 @@ const ReplyComment: React.FC<CommentProps> = ({
       }
     );
 
-    const updatedComment = {
-      ...response.data,
-      userName: username,
-      avatarPath: avatarpath,
-    };
+    // const updatedComment = {
+    //   ...response.data,
+    //   userName: username,
+    //   avatarPath: avatarpath,
+    // };
     setLike(response.data.likes);
     // dispatch(setComment({ comment: updatedComment }));
   };

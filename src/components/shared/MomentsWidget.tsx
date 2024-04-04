@@ -128,10 +128,10 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
             momentPath={moment.momentPath}
             description={moment.description}
             visibility={moment.visibility}
-            likes={moment.likes}
             isArchive={moment.isArchive}
             getArchive={getArchiveMoments}
             comments={moment.comments}
+            emojis={moment.emojis}
           />
         ))
       ) : (

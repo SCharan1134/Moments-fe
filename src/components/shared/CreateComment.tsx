@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { addComment } from "../../state/index";
 import data from "@emoji-mart/data";
+// import emojiIndex from "emoji-mart";
 import Picker from "@emoji-mart/react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -126,7 +127,6 @@ const CreateComment: React.FC<CreateCommentProps> = ({
             </Button>
             {showEmojiPicker && (
               <div className="absolute bottom-0 right-0 " ref={emojiPickerRef}>
-                {/* <Picker/> */}
                 <Picker
                   data={data}
                   onEmojiSelect={(emoji: any) => {

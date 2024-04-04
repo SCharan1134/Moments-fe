@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   ChatBubbleIcon,
@@ -17,6 +17,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useToast } from "../ui/use-toast";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { init } from "emoji-mart";
+import { Button } from "../ui/button";
+
+init({ data });
 
 interface MomentProps {
   postId: string;
@@ -24,7 +30,7 @@ interface MomentProps {
   momentPath?: string;
   description?: string;
   visibility: "public" | "private" | "friends";
-  likes: Map<string, boolean>;
+  emojis: { [userId: string]: string };
   comments: [];
   isArchive: Boolean;
   getArchive?: () => void;
@@ -41,7 +47,7 @@ const Moment: React.FC<MomentProps> = ({
   momentPath,
   description,
   visibility,
-  likes,
+  emojis,
   comments,
   isArchive,
   getArchive,
@@ -54,17 +60,29 @@ const Moment: React.FC<MomentProps> = ({
   const favorites = useSelector((state: any) => state.user.favoriteMoments);
   const isfavorite =
     favorites.find((favorite: any) => favorite === postId) !== undefined;
-  const isLiked =
-    likes instanceof Map // Check if likes is a Map
-      ? likes.has(loggedInUserId) // If so, use Map methods
-      : typeof likes === "object" && // Otherwise, if it's an object
-        loggedInUserId in likes && // Check if loggedInUserId exists in it
-        Boolean(likes[loggedInUserId]);
-
-  const likeCount = Object.keys(likes).length;
+  const emojiReaction = emojis[loggedInUserId];
+  const emojiCount = Object.keys(emojis).length;
   const commentCount = comments?.length ?? 0;
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -88,10 +106,13 @@ const Moment: React.FC<MomentProps> = ({
     }
   }, []);
 
-  const patchLike = async () => {
+  const patchEmoji = async (emoji: any) => {
     const response = await axios.patch(
-      `http://localhost:3001/moments/${postId}/like`,
-      { userId: loggedInUserId },
+      `http://localhost:3001/moments/${postId}/emoji`,
+      {
+        userId: loggedInUserId,
+        emojis: emoji,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -322,14 +343,80 @@ const Moment: React.FC<MomentProps> = ({
           </div>
           <div className="w-full pl-5">{description}</div>
 
-          <div className="flex justify-between w-full px-10 py-5 pl-5">
+          <div className="flex justify-between w-full mx-10 my-5 pl-5">
             <div
-              className="flex items-center justify-center gap-2 cursor-pointer"
-              onClick={patchLike}
+              className="flex items-center justify-center gap-2 cursor-pointer rounded-full"
+              // onClick={patchLike}
             >
-              {isLiked ? <HeartFilledIcon /> : <HeartIcon />}
+              {/* {isLiked ? <HeartFilledIcon /> : <HeartIcon />} */}
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "🔥" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("🔥")}
+              >
+                🔥
+              </div>
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "💖" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("💖")}
+              >
+                💖
+              </div>
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "😂" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("😂")}
+              >
+                😂
+              </div>
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "😍" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("😍")}
+              >
+                😍
+              </div>
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "🥲" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("🥲")}
+              >
+                🥲
+              </div>
+              <div
+                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                  emojiReaction === "😠" ? "bg-primary" : ""
+                }`}
+                onClick={() => patchEmoji("😠")}
+              >
+                😠
+              </div>
+              <Button
+                className="rounded-full p-1 h-8 w-8"
+                type="button"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                +
+              </Button>
+              {showEmojiPicker && (
+                <div className="absolute bottom-0 z-10 " ref={emojiPickerRef}>
+                  <Picker
+                    data={data}
+                    onEmojiSelect={(emoji: any) => {
+                      patchEmoji(emoji.native);
+                      setShowEmojiPicker(false);
+                    }}
+                  />
+                </div>
+              )}
 
-              <div>{likeCount}</div>
+              <div>{emojiCount}</div>
             </div>
             <div className="flex items-center justify-center gap-2">
               <ChatBubbleIcon onClick={() => navigate(`/moment/${postId}`)} />

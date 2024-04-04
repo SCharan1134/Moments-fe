@@ -9,7 +9,7 @@ interface Moment {
   userId: string;
   description?: string;
   momentPath?: string;
-  likes: Map<string, boolean>;
+  emojis: Map<string, string>;
   visibility: "public" | "private" | "friends";
   comments: string[];
   createdAt: Date;
