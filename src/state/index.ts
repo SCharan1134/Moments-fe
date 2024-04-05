@@ -8,7 +8,7 @@ interface User {
 interface Moment {
   userId: string;
   description?: string;
-  momentPath?: string;
+  momentPath?: string[];
   emojis: Map<string, string>;
   visibility: "public" | "private" | "friends";
   comments: string[];

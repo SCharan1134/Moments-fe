@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { useToast } from "../ui/use-toast";
 
 const validationSchema = Yup.object().shape({
   description: Yup.string().required("Description is required"),
-  file: Yup.string().required("Image is required"),
+  file: Yup.array().min(1, "At least one image is required"),
   visibility: Yup.string().required("Visibility is required"),
 });
 
@@ -20,16 +20,27 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
   const token = useSelector((state: any) => state.token);
   const { toast } = useToast();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [previewFiles, setPreviewFiles] = useState<File[]>([]);
 
   const handleSubmit = async (values: any) => {
     try {
+      if (!values.file || values.file.length === 0) {
+        console.error("No files selected");
+        return;
+      }
       const formData = new FormData();
       formData.append("userId", _id);
       formData.append("description", values.description);
       if (values.file) {
-        formData.append("moment", values.file);
-        formData.append("momentPath", values.file.name);
+        for (const file of values.file) {
+          formData.append("moment", file);
+          formData.append("momentPath", file.name);
+        }
       }
+      // if (values.file) {
+      //   formData.append("moment", values.file);
+      //   formData.append("momentPath", values.file.name);
+      // }
       formData.append("visibility", values.visibility);
       console.log(...formData);
       const response = await axios.post(
@@ -59,6 +70,13 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.currentTarget.files;
+    if (selectedFiles) {
+      setPreviewFiles(Array.from(selectedFiles));
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleCloseModal);
     return () => {
@@ -79,8 +97,17 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
             visibility: "public",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values: any) => {
-            handleSubmit(values);
+          onSubmit={(values: any, { setSubmitting }) => {
+            handleSubmit(values)
+              .then(() => {
+                setSubmitting(false);
+              })
+              .catch((error) => {
+                console.error("Form submission error:", error);
+                setSubmitting(false);
+                // Handle the error, e.g., display error message to the user
+                // You can use Formik's setError function to display errors
+              });
           }}
         >
           {({ setFieldValue }) => (
@@ -117,10 +144,36 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
                   // accept="image/*"
                   id="file"
                   name="file"
+                  multiple // Add multiple attribute to select multiple files
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setFieldValue("file", event.currentTarget.files![0]);
+                    // Use event.currentTarget.files to access the array of selected files
+                    const selectedFiles = event.currentTarget.files;
+                    if (selectedFiles) {
+                      // Convert the FileList object to an array and set it as the value
+                      // Assuming you only want to store the first file, you can modify this logic accordingly
+                      setFieldValue("file", Array.from(selectedFiles));
+                      setPreviewFiles(Array.from(selectedFiles));
+                    }
                   }}
+                  // onChange={handleFileChange}
                 />
+                <div>
+                  {previewFiles.map((file, index) => (
+                    <div key={index}>
+                      {file.name}{" "}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPreviewFiles((prevFiles) =>
+                            prevFiles.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
                 <ErrorMessage
                   name="file"
                   component="div"

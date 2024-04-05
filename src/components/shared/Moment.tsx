@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import {
-  ChatBubbleIcon,
-  DotsVerticalIcon,
-  HeartFilledIcon,
-  HeartIcon,
-} from "@radix-ui/react-icons";
+import { ChatBubbleIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { changeUserDetails, setMoment } from "@/state";
@@ -21,13 +16,22 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { init } from "emoji-mart";
 import { Button } from "../ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 init({ data });
 
 interface MomentProps {
   postId: string;
   postUserId: string;
-  momentPath?: string;
+  momentPath?: string[];
   description?: string;
   visibility: "public" | "private" | "friends";
   emojis: { [userId: string]: string };
@@ -67,6 +71,23 @@ const Moment: React.FC<MomentProps> = ({
   const { toast } = useToast();
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const momentsLength = momentPath?.length;
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -101,6 +122,7 @@ const Moment: React.FC<MomentProps> = ({
     }
   };
   useEffect(() => {
+    console.log(momentPath?.[0]?.split(".").pop() === "mp4");
     if (postUserId) {
       fetchData();
     }
@@ -258,7 +280,7 @@ const Moment: React.FC<MomentProps> = ({
   };
 
   return (
-    <div className="py-4 px-4 border border-black  rounded-2xl bg-moment w-[500px] h-[600px]">
+    <div className="py-4 px-4 border border-black  rounded-2xl bg-moment ">
       {isloading ? (
         <div>Loading</div>
       ) : (
@@ -336,10 +358,75 @@ const Moment: React.FC<MomentProps> = ({
             </DropdownMenu>
           </div>
           <div className="mt-2">
-            <img
-              src={`http://localhost:3001/moments/${momentPath}`}
-              className="rounded-lg w-[450px] h-[450px]"
-            />
+            {(momentsLength as number) > 1 ? (
+              <div>
+                <Carousel setApi={setApi} className="w-[450px] h-[450px]">
+                  <CarouselContent>
+                    {Array.from({ length: momentsLength as number }).map(
+                      (_, index) => (
+                        <CarouselItem key={index}>
+                          <Card>
+                            <CardContent className="p-0">
+                              {momentPath?.[index]?.split(".").pop() ===
+                              "mp4" ? (
+                                // If it's a video, render a <video> tag
+                                <div className="flex justify-center items-center">
+                                  <video
+                                    controls
+                                    className="rounded-lg max-w-[450px] h-[450px] "
+                                  >
+                                    <source
+                                      src={`http://localhost:3001/moments/${momentPath?.[index]}`}
+                                      type="video/mp4"
+                                    />
+                                    Your browser does not support the video tag.
+                                  </video>
+                                </div>
+                              ) : (
+                                // If it's an image, render an <img> tag
+                                <img
+                                  src={`http://localhost:3001/moments/${momentPath?.[index]}`}
+                                  className="rounded-lg w-[450px] h-[450px]"
+                                />
+                              )}
+                            </CardContent>
+                          </Card>
+                        </CarouselItem>
+                      )
+                    )}
+                  </CarouselContent>
+                  <CarouselNext className="obsolute right-0 bg-primary opacity-50 scale-50 hover:opacity-100 hover:scale-75 transition-all" />
+                  <CarouselPrevious className="obsolute left-0 bg-primary opacity-50 scale-50 hover:opacity-100 hover:scale-75 transition-all" />
+                </Carousel>
+                <div className="text-center text-sm text-muted-foreground">
+                  {current} of {count}
+                </div>
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="p-0">
+                  {momentPath?.[0]?.split(".").pop() === "mp4" ? (
+                    // If it's a video, render a <video> tag
+                    <video
+                      controls
+                      className="rounded-lg max-w-[450px] h-[450px]"
+                    >
+                      <source
+                        src={`http://localhost:3001/moments/${momentPath?.[0]}`}
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    // If it's an image, render an <img> tag
+                    <img
+                      src={`http://localhost:3001/moments/${momentPath?.[0]}`}
+                      className="rounded-lg w-[450px] h-[450px]"
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
           <div className="w-full pl-5">{description}</div>
 
