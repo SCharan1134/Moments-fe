@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface FriendProps {
@@ -16,7 +16,7 @@ interface FriendProps {
 
 const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
   const { toast } = useToast();
-  const { _id } = useSelector((state: any) => state.user);
+  const { _id, pendingFriends } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const [isSent, setIsSent] = useState(false);
   const navigate = useNavigate();
@@ -67,6 +67,13 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
       console.error("Error submitting form:", error);
     }
   };
+
+  useEffect(() => {
+    if (pendingFriends.includes(userid)) {
+      console.log("pending");
+    }
+  });
+
   return (
     <div className="flex w-full justify-between items-center px-2 py-1">
       <div

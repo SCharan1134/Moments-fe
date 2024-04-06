@@ -31,6 +31,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import LikesModal from "@/components/shared/LikesModal";
 
 init({ data });
 
@@ -62,6 +63,11 @@ const MomentPage = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   useEffect(() => {
     if (!api) {
@@ -243,10 +249,7 @@ const MomentPage = () => {
                     {moment.momentPath?.[0]?.split(".").pop() === "mp4" ? (
                       // If it's a video, render a <video> tag
                       <div className="flex justify-center items-center">
-                        <video
-                          controls
-                          className="rounded-lg max-w-[450px] h-[450px]"
-                        >
+                        <video controls className="rounded-lg h-[600px]">
                           <source
                             src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
                             type="video/mp4"
@@ -258,7 +261,7 @@ const MomentPage = () => {
                       // If it's an image, render an <img> tag
                       <img
                         src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
-                        className="rounded-lg w-[450px] h-[450px]"
+                        className="rounded-lg "
                       />
                     )}
                   </CardContent>
@@ -337,83 +340,85 @@ const MomentPage = () => {
                   )}
                 </div>
               </div>
-              <div className="w-full flex items-center justify-between mt-5">
-                <div
-                  className="flex items-center justify-center gap-2 cursor-pointer rounded-full"
-                  // onClick={patchLike}
-                >
-                  {/* {isLiked ? <HeartFilledIcon /> : <HeartIcon />} */}
+              <div className="w-full flex items-center justify-between gap-1">
+                <div className="flex flex-col">
                   <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "🔥" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("🔥")}
+                    className="font-semibold text-sm cursor-pointer pl-2 pt-2"
+                    onClick={() => setShowModal(true)}
                   >
-                    🔥
+                    {emojiCount} Reacts
                   </div>
-                  <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "💖" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("💖")}
-                  >
-                    💖
-                  </div>
-                  <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "😂" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("😂")}
-                  >
-                    😂
-                  </div>
-                  <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "😍" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("😍")}
-                  >
-                    😍
-                  </div>
-                  <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "🥲" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("🥲")}
-                  >
-                    🥲
-                  </div>
-                  <div
-                    className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                      emojiReaction === "😠" ? "bg-primary" : ""
-                    }`}
-                    onClick={() => patchEmoji("😠")}
-                  >
-                    😠
-                  </div>
-                  <Button
-                    className="rounded-full p-1 h-8 w-8"
-                    type="button"
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  >
-                    +
-                  </Button>
-                  {showEmojiPicker && (
+                  <div className="flex items-center justify-center gap-2 cursor-pointer rounded-full">
                     <div
-                      className="absolute bottom-0 z-10 "
-                      ref={emojiPickerRef}
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "🔥" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("🔥")}
                     >
-                      <Picker
-                        data={data}
-                        onEmojiSelect={(emoji: any) => {
-                          patchEmoji(emoji.native);
-                          setShowEmojiPicker(false);
-                        }}
-                      />
+                      🔥
                     </div>
-                  )}
-
-                  <div>{emojiCount}</div>
+                    <div
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "💖" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("💖")}
+                    >
+                      💖
+                    </div>
+                    <div
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "😂" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("😂")}
+                    >
+                      😂
+                    </div>
+                    <div
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "😍" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("😍")}
+                    >
+                      😍
+                    </div>
+                    <div
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "🥲" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("🥲")}
+                    >
+                      🥲
+                    </div>
+                    <div
+                      className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                        emojiReaction === "😠" ? "bg-primary" : ""
+                      }`}
+                      onClick={() => patchEmoji("😠")}
+                    >
+                      😠
+                    </div>
+                    <Button
+                      className="rounded-full p-1 h-8 w-8"
+                      type="button"
+                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    >
+                      +
+                    </Button>
+                    {showEmojiPicker && (
+                      <div
+                        className="absolute bottom-0 z-10 "
+                        ref={emojiPickerRef}
+                      >
+                        <Picker
+                          data={data}
+                          onEmojiSelect={(emoji: any) => {
+                            patchEmoji(emoji.native);
+                            setShowEmojiPicker(false);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <CreateComment
@@ -427,6 +432,11 @@ const MomentPage = () => {
               />
             </div>
           </div>
+          {showModal && (
+            <LikesModal momentId={moment._id} onClose={closeModal}>
+              <Button onClick={closeModal}>close</Button>
+            </LikesModal>
+          )}
         </>
       )}
     </div>

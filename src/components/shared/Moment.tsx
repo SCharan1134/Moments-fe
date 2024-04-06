@@ -122,7 +122,7 @@ const Moment: React.FC<MomentProps> = ({
     }
   };
   useEffect(() => {
-    console.log(momentPath?.[0]?.split(".").pop() === "mp4");
+    // console.log(momentPath?.[0]?.split(".").pop() === "mp4");
     if (postUserId) {
       fetchData();
     }
@@ -430,82 +430,89 @@ const Moment: React.FC<MomentProps> = ({
           </div>
           <div className="w-full pl-5">{description}</div>
 
-          <div className="flex justify-between w-full mx-10 my-5 pl-5">
-            <div
-              className="flex items-center justify-center gap-2 cursor-pointer rounded-full"
-              // onClick={patchLike}
-            >
-              {/* {isLiked ? <HeartFilledIcon /> : <HeartIcon />} */}
+          <div className="flex items-end justify-between w-full mx-10 mt-5 pl-5">
+            <div className="flex flex-col">
               <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "🔥" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("🔥")}
+                className="font-semibold text-sm cursor-pointer"
+                onClick={() => navigate(`/moment/${postId}`)}
               >
-                🔥
+                {emojiCount} Reacts
               </div>
-              <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "💖" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("💖")}
-              >
-                💖
-              </div>
-              <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "😂" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("😂")}
-              >
-                😂
-              </div>
-              <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "😍" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("😍")}
-              >
-                😍
-              </div>
-              <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "🥲" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("🥲")}
-              >
-                🥲
-              </div>
-              <div
-                className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                  emojiReaction === "😠" ? "bg-primary" : ""
-                }`}
-                onClick={() => patchEmoji("😠")}
-              >
-                😠
-              </div>
-              <Button
-                className="rounded-full p-1 h-8 w-8"
-                type="button"
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              >
-                +
-              </Button>
-              {showEmojiPicker && (
-                <div className="absolute bottom-0 z-10 " ref={emojiPickerRef}>
-                  <Picker
-                    data={data}
-                    onEmojiSelect={(emoji: any) => {
-                      patchEmoji(emoji.native);
-                      setShowEmojiPicker(false);
-                    }}
-                  />
-                </div>
-              )}
 
-              <div>{emojiCount}</div>
+              <div
+                className="flex items-start justify-center gap-2 cursor-pointer rounded-full"
+                // onClick={patchLike}
+              >
+                {/* {isLiked ? <HeartFilledIcon /> : <HeartIcon />} */}
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "🔥" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("🔥")}
+                >
+                  🔥
+                </div>
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "💖" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("💖")}
+                >
+                  💖
+                </div>
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "😂" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("😂")}
+                >
+                  😂
+                </div>
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "😍" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("😍")}
+                >
+                  😍
+                </div>
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "🥲" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("🥲")}
+                >
+                  🥲
+                </div>
+                <div
+                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                    emojiReaction === "😠" ? "bg-primary" : ""
+                  }`}
+                  onClick={() => patchEmoji("😠")}
+                >
+                  😠
+                </div>
+                <Button
+                  className="rounded-full p-1 h-8 w-8"
+                  type="button"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                >
+                  +
+                </Button>
+                {showEmojiPicker && (
+                  <div className="absolute bottom-0 z-10 " ref={emojiPickerRef}>
+                    <Picker
+                      data={data}
+                      onEmojiSelect={(emoji: any) => {
+                        patchEmoji(emoji.native);
+                        setShowEmojiPicker(false);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 pr-5">
               <ChatBubbleIcon onClick={() => navigate(`/moment/${postId}`)} />
               {commentCount}
             </div>

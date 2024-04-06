@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import AvatarPic from "./AvatarPic";
+import { useSelector } from "react-redux";
 
 const SideNavbar = () => {
   const navigate = useNavigate();
+  const user = useSelector((state: any) => state.user);
 
   return (
     <div className="bg-secondary h-full border-r border-black">
+      <div
+        className="flex w-full items-center justify-between px-12 pt-5 cursor-pointer"
+        onClick={() => navigate(`/profile/${user._id}`)}
+      >
+        <AvatarPic />
+        <div className="font-semibold text-lg">{user.userName}</div>
+      </div>
       <div className="text-lg flex flex-col justify-center items-start gap-10 pl-20 py-10">
         <button className="flex items-center" onClick={() => navigate("/home")}>
           {/* <FaHome size={30} className="mr-2" /> */}
