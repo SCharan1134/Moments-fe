@@ -175,10 +175,10 @@ const CustomComment: React.FC<CommentProps> = ({
 
             <div onClick={handleReplyClick}>reply</div>
             <div
-              className="hidden group-hover:block text-primary"
+              className="hidden group-hover:block text-primary "
               onClick={deleteComment}
             >
-              <FiTrash2 className="h-4 w-4" />
+              <FiTrash2 className="h-4 w-4 cursor-pointer" />
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ const SideNavbar = () => {
         </button>
         <button
           className="flex items-center"
-          onClick={() => navigate("/messages")}
+          onClick={() => navigate("/search")}
         >
           {/* <FaEnvelope size={30} className="mr-2" /> */}
           Search
@@ -43,7 +43,7 @@ const SideNavbar = () => {
         </button>
         <button
           className="flex items-center"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate("/gallery")}
         >
           {/* <FaUser size={30} className="mr-2" />p */}
           Gallery

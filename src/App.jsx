@@ -6,6 +6,9 @@ import {
   NotFound,
   ProfilePage,
   Settings,
+  SearchPage,
+  GalleryPage,
+  ChatPage,
 } from "./_root/pages";
 import SignupForm from "./_auth/forms/SignupForm";
 import AuthLayout from "./_auth/AuthLayout";
@@ -29,7 +32,10 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/temp" element={<FriendSuggestionList />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/messages" element={<ChatPage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/moment/:momentId" element={<MomentPage />} />
           <Route path="*" element={<NotFound />} />

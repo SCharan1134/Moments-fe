@@ -5,6 +5,9 @@ interface User {
   // Define your user object structure here
 }
 
+interface Conversation {}
+interface Message {}
+
 interface Moment {
   userId: string;
   description?: string;
@@ -42,20 +45,24 @@ interface Comment {
 
 interface AuthState {
   user: User | null;
+  conversation: Conversation | null;
   token: string | null;
   moment: Moment | null;
   moments: Moment[];
   comments: Comment[];
+  messages: Message[];
   memories: Memory[];
 }
 
 const initialState: AuthState = {
+  conversation: null,
   user: null,
   token: null,
   moment: null,
   moments: [],
   comments: [],
   memories: [],
+  messages: [],
 };
 
 export const authSlice = createSlice({
@@ -71,6 +78,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.moments = [];
       state.memories = [];
+      state.conversation = null;
+      state.comments = [];
+      state.messages = [];
     },
     changeUserDetails: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
@@ -114,6 +124,9 @@ export const authSlice = createSlice({
     setMemories: (state, action: PayloadAction<{ memories: Memory[] }>) => {
       state.memories = action.payload.memories;
     },
+    setMessages: (state, action: PayloadAction<{ messages: Message[] }>) => {
+      state.messages = action.payload.messages;
+    },
     setMemory: (state, action: PayloadAction<{ memory: Memory }>) => {
       const updatedMoments = state.memories.map((memory) => {
         if (memory._id === action.payload.memory._id)
@@ -121,6 +134,12 @@ export const authSlice = createSlice({
         return memory;
       });
       state.memories = updatedMoments;
+    },
+    setConversation: (
+      state,
+      action: PayloadAction<{ conversation: Conversation | null }>
+    ) => {
+      state.conversation = action.payload.conversation;
     },
   },
 });
@@ -139,5 +158,7 @@ export const {
   setSingleMoment,
   setMemories,
   setMemory,
+  setConversation,
+  setMessages,
 } = authSlice.actions;
 export default authSlice.reducer;

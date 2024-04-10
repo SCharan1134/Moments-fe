@@ -2,8 +2,6 @@ import MomentsWidget from "@/components/shared/MomentsWidget";
 import { useSelector } from "react-redux";
 import FriendSuggestionList from "@/components/shared/FriendSuggestionList";
 import { useEffect, useState } from "react";
-import MemoryWidget from "@/components/shared/MemoryWidget";
-// import MemoryWidget from "@/components/shared/MemoryWidget";
 
 const Home: React.FC = () => {
   const user = useSelector((state: any) => state.user);
