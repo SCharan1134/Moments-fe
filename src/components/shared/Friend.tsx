@@ -75,9 +75,9 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
   });
 
   return (
-    <div className="flex w-full justify-between items-center px-2 py-1">
+    <div className="flex w-full justify-between items-center px-2 py-1 m-2">
       <div
-        className="flex items-start gap-3 cursor-pointer"
+        className="flex items-center gap-3 cursor-pointer"
         onClick={() => navigate(`/profile/${friendId}`)}
       >
         <Avatar>
@@ -86,10 +86,10 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>
         </Avatar>
-        <p>{userid}</p>
+        <p className="text-white">{userid}</p>
       </div>
-      <Button onClick={handleAddFriend}>
-        {isSent ? " sent" : "add Friend"}
+      <Button className="text-primary bg-inherit" onClick={handleAddFriend}>
+        {isSent ? " sent" : "Add Friend"}
       </Button>
     </div>
   );

@@ -12,21 +12,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Loader from "@/components/shared/Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { setLogin } from "@/state";
-import { useDispatch } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
 
 const loginDetails = z.object({
-  email: z.string().email(),
-  password: z
+  recievedverification: z
     .string()
-    .min(8, { message: "password must be atleast 8 characters" }),
+    .min(6, { message: "otp must be atleast 6 characters" }),
 });
 
-const signinForm = () => {
-  const dispatch = useDispatch();
+const VerifyForm = () => {
+  const { userId } = useParams();
   const isloading = false;
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -35,34 +32,26 @@ const signinForm = () => {
   const form = useForm<z.infer<typeof loginDetails>>({
     resolver: zodResolver(loginDetails),
     defaultValues: {
-      email: "",
-      password: "",
+      recievedverification: "",
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginDetails>) {
     try {
-      const loggedInResponse = await axios.post(
-        "http://localhost:3001/auth/login",
+      console.log(values);
+      const response = await axios.post(
+        `http://localhost:3001/auth/verify/${userId}`,
         values,
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-      const loggedIn = loggedInResponse.data;
-      if (loggedIn) {
-        dispatch(
-          setLogin({
-            user: loggedIn.user,
-            token: loggedIn.token,
-          })
-        );
-        toast({
-          duration: 2000,
-          description: "log in successfully",
-        });
-        navigate("/home");
+      if (response.data.isValid) {
+        console.log("verified succesfully");
+        navigate("/sign-in");
+      } else {
+        console.log("Invalid verification code. Please try again.");
       }
     } catch (error) {
       toast({
@@ -78,39 +67,27 @@ const signinForm = () => {
     <Form {...form}>
       <div className="sm:w-[653px] h-full flex justify-between items-center flex-col p-10">
         <div className="text-4xl font-bold text-primary">Moments</div>
+        <div className="w-full flex justify-start flex-col gap-2">
+          <div className="text-white text-xl">Check Your Inbox</div>
+          <div className="text-white">
+            OTP has shared to your entered email address
+          </div>
+        </div>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5 w-full mt-4"
         >
           <FormField
             control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
-                    type="email"
-                    {...field}
-                    placeholder="Email or Username"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
+            name="recievedverification"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input
                     className="bg-[#363536] border-[#494949] text-[#8B8B8B] "
-                    type="password"
+                    type="recievedverification"
                     {...field}
-                    placeholder="password"
+                    placeholder="otp"
                   />
                 </FormControl>
                 <FormMessage />
@@ -123,25 +100,38 @@ const signinForm = () => {
                 <Loader />
               </div>
             ) : (
-              "LOGIN"
+              "Verify"
             )}
           </Button>
         </form>
-        <div className="border w-full border-[#757575]" />
-        <div className="text-[#8b8b8b] text-lg">Forgot Password?</div>
         <div className="border w-28 border-[#757575]" />
         <p className="text-sm text-primary">
-          Don't have an account?{" "}
+          check the email address?{" "}
           <Link
             to="/sign-up"
             className="border-b border-primary hover:border-0 transition-all cursor-pointer"
           >
-            Create Account
+            Go back
           </Link>
+        </p>
+        <p className="text-sm text-white font-light mt-2">
+          By signing up, you agree to our{" "}
+          <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+            Terms
+          </span>{" "}
+          ,
+          <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+            Privacy Policy
+          </span>{" "}
+          and
+          <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+            Cookies Policy{" "}
+          </span>
+          .
         </p>
       </div>
     </Form>
   );
 };
 
-export default signinForm;
+export default VerifyForm;

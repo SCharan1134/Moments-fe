@@ -19,9 +19,9 @@ export default {
     },
     extend: {
       colors: {
-        secondary: "#FFF8ED",
+        secondary: "#121212",
         primary: "#FF8080",
-        moment: "#FFF4E4",
+        moment: "#1B1B1D",
       },
     },
   },

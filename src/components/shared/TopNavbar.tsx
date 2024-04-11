@@ -26,52 +26,54 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ openCreateMomentModal }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-full h-14 justify-between items-center px-10 py-5 bg-secondary border-b border-black">
-      <div
-        onClick={() => navigate("/home")}
-        className=" cursor-pointer text-lg font-bold"
-      >
-        Moments
-      </div>
-      <div className="flex gap-10 items-center">
-        <div>
-          <Button onClick={openCreateMomentModal} className="px-5 ">
-            Create Moment
-          </Button>
+    <div className="flex w-full h-[70px] justify-between items-center px-3 py-5 ">
+      <div className="bg-moment flex w-full justify-between items-center px-10 py-2 rounded-xl border-[#474748] border">
+        <div
+          onClick={() => navigate("/home")}
+          className=" cursor-pointer text-2xl font-bold text-primary"
+        >
+          Moments
         </div>
-        <div>
-          <Notification />
+        <div className="flex gap-10 items-center">
+          <div>
+            <Button onClick={openCreateMomentModal} className="px-3">
+              Create Moment
+            </Button>
+          </div>
+          <div className="text-white">
+            <Notification />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <AvatarPic />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-34 bg-white p-2 border border-black rounded-md px-5">
+              <DropdownMenuLabel className="py-1">{userName}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  className="py-1 cursor-pointer"
+                  onClick={() => navigate(`/profile/${_id}`)}
+                >
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="py-1 cursor-pointer"
+                  onClick={() => navigate("/settings")}
+                >
+                  Edit Profile
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-red-600 py-1 cursor-pointer"
+                onClick={() => dispatch(setLogout())}
+              >
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <AvatarPic />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-34 bg-white p-2 border border-black rounded-md px-5">
-            <DropdownMenuLabel className="py-1">{userName}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem
-                className="py-1 cursor-pointer"
-                onClick={() => navigate(`/profile/${_id}`)}
-              >
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="py-1 cursor-pointer"
-                onClick={() => navigate("/settings")}
-              >
-                Edit Profile
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-red-600 py-1 cursor-pointer"
-              onClick={() => dispatch(setLogout())}
-            >
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </div>
   );

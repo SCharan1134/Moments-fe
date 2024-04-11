@@ -36,7 +36,9 @@ const FriendSuggestionList = () => {
   }, []);
   return (
     <div className="flex flex-col items-start w-full py-5">
-      <div className="text-lg font-semibold pb-2">Suggestions</div>
+      <div className="text-lg font-semibold pb-2 text-white">
+        Suggested Friends
+      </div>
       <div className="w-full">
         {friends.map((friend) => (
           <Friend
@@ -47,7 +49,9 @@ const FriendSuggestionList = () => {
           />
         ))}
       </div>
-      <div className="text-md font-semibold pb-2 text-gray-400">See all</div>
+      {/* <div className="text-md font-semibold pb-2 text-gray-400 ml-4">
+        See all
+      </div> */}
     </div>
   );
 };

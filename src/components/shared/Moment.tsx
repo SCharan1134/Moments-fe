@@ -280,12 +280,12 @@ const Moment: React.FC<MomentProps> = ({
   };
 
   return (
-    <div className="py-4 px-4 border border-black  rounded-2xl bg-moment ">
+    <div className="py-4 px-4 border border-[#474748]  rounded-2xl bg-moment w-[500px]  ">
       {isloading ? (
         <div>Loading</div>
       ) : (
         <div className="flex flex-col items-center   ">
-          <div className="flex w-full pl-2 items-center justify-between gap-3 ">
+          <div className="flex w-full items-center justify-between gap-3 ">
             <div
               className="flex items-center gap-3 cursor-pointer"
               onClick={() => navigate(`/profile/${friendData?._id}`)}
@@ -299,13 +299,13 @@ const Moment: React.FC<MomentProps> = ({
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <p>{friendData?.userName}</p>
-                <p className="text-xs">{visibility}</p>
+                <p className="text-white">{friendData?.userName}</p>
+                <p className="text-xs text-[#747271]">{visibility}</p>
               </div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <DotsVerticalIcon className="h-6 w-6" />
+                <DotsVerticalIcon className="h-6 w-6 text-white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-secondary py-5 px-3 flex flex-col gap-3 border border-black rounded-lg">
                 {isfavorite ? (
@@ -360,7 +360,7 @@ const Moment: React.FC<MomentProps> = ({
           <div className="mt-2">
             {(momentsLength as number) > 1 ? (
               <div>
-                <Carousel setApi={setApi} className="w-[450px] h-[450px]">
+                <Carousel setApi={setApi} className="w-[420px] h-[420px]">
                   <CarouselContent>
                     {Array.from({ length: momentsLength as number }).map(
                       (_, index) => (
@@ -373,7 +373,7 @@ const Moment: React.FC<MomentProps> = ({
                                 <div className="flex justify-center items-center">
                                   <video
                                     controls
-                                    className="rounded-lg max-w-[450px] h-[450px] "
+                                    className="rounded-lg max-w-[420px] h-[420px] "
                                   >
                                     <source
                                       src={`http://localhost:3001/moments/${momentPath?.[index]}`}
@@ -386,7 +386,7 @@ const Moment: React.FC<MomentProps> = ({
                                 // If it's an image, render an <img> tag
                                 <img
                                   src={`http://localhost:3001/moments/${momentPath?.[index]}`}
-                                  className="rounded-lg w-[450px] h-[450px]"
+                                  className="rounded-lg w-[420px] h-[420px]"
                                 />
                               )}
                             </CardContent>
@@ -398,7 +398,7 @@ const Moment: React.FC<MomentProps> = ({
                   <CarouselNext className="obsolute right-0 bg-primary opacity-50 scale-50 hover:opacity-100 hover:scale-75 transition-all" />
                   <CarouselPrevious className="obsolute left-0 bg-primary opacity-50 scale-50 hover:opacity-100 hover:scale-75 transition-all" />
                 </Carousel>
-                <div className="text-center text-sm text-muted-foreground">
+                <div className="text-center text-sm text-muted-foreground text-white">
                   {current} of {count}
                 </div>
               </div>
@@ -409,7 +409,7 @@ const Moment: React.FC<MomentProps> = ({
                     // If it's a video, render a <video> tag
                     <video
                       controls
-                      className="rounded-lg max-w-[450px] h-[450px]"
+                      className="rounded-lg max-w-[420px] h-[420px]"
                     >
                       <source
                         src={`http://localhost:3001/moments/${momentPath?.[0]}`}
@@ -421,24 +421,17 @@ const Moment: React.FC<MomentProps> = ({
                     // If it's an image, render an <img> tag
                     <img
                       src={`http://localhost:3001/moments/${momentPath?.[0]}`}
-                      className="rounded-lg w-[450px] h-[450px]"
+                      className="rounded-lg w-[420px] h-[420px]"
                     />
                   )}
                 </CardContent>
               </Card>
             )}
           </div>
-          <div className="w-full pl-5">{description}</div>
+          <div className="w-full pl-5 text-white mt-1">{description}</div>
 
-          <div className="flex items-end justify-between w-full mx-10 mt-5 pl-5">
+          <div className="flex items-end justify-between w-full mx-10 mt-5">
             <div className="flex flex-col">
-              <div
-                className="font-semibold text-sm cursor-pointer"
-                onClick={() => navigate(`/moment/${postId}`)}
-              >
-                {emojiCount} Reacts
-              </div>
-
               <div
                 className="flex items-start justify-center gap-2 cursor-pointer rounded-full"
                 // onClick={patchLike}
@@ -511,10 +504,16 @@ const Moment: React.FC<MomentProps> = ({
                   </div>
                 )}
               </div>
+              <div
+                className="font-medium text-sm cursor-pointer text-white mt-1 ml-2"
+                onClick={() => navigate(`/moment/${postId}`)}
+              >
+                {emojiCount} Reacts
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-2 pr-5">
+            <div className="flex flex-col items-center justify-center gap-2 pr-5 text-white">
               <ChatBubbleIcon onClick={() => navigate(`/moment/${postId}`)} />
-              {commentCount}
+              <span className="font-medium">{commentCount} comments</span>
             </div>
           </div>
         </div>
