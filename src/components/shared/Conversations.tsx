@@ -9,12 +9,13 @@ const Conversations = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const token = useSelector((state: any) => state.token);
+  const user = useSelector((state: any) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:3001/users/search/user`,
+          `http://localhost:3001/users/search/user/${user._id}`,
           { query: searchTerm },
           {
             headers: {

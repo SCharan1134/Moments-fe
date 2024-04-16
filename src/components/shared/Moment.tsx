@@ -527,21 +527,12 @@ const Moment: React.FC<MomentProps> = ({
                 <Button
                   className="rounded-full p-1 h-8 w-8"
                   type="button"
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  onClick={() => {
+                    setShowEmojiPicker(true);
+                  }}
                 >
                   +
                 </Button>
-                {showEmojiPicker && (
-                  <div className="absolute bottom-0 z-10 " ref={emojiPickerRef}>
-                    <Picker
-                      data={data}
-                      onEmojiSelect={(emoji: any) => {
-                        patchEmoji(emoji.native);
-                        setShowEmojiPicker(false);
-                      }}
-                    />
-                  </div>
-                )}
               </div>
               <div
                 className="font-medium text-sm cursor-pointer text-white mt-1 ml-2"
@@ -550,6 +541,17 @@ const Moment: React.FC<MomentProps> = ({
                 {emojiCount} Reacts
               </div>
             </div>
+            {showEmojiPicker && (
+              <div className="absolute bottom-0 z-10 " ref={emojiPickerRef}>
+                <Picker
+                  data={data}
+                  onEmojiSelect={(emoji: any) => {
+                    patchEmoji(emoji.native);
+                    setShowEmojiPicker(false);
+                  }}
+                />
+              </div>
+            )}
             <div
               className="flex flex-col items-center justify-center gap-2 pr-5 text-white"
               onClick={() => {
@@ -560,6 +562,7 @@ const Moment: React.FC<MomentProps> = ({
               <span className="font-medium">{commentCount} comments</span>
             </div>
           </div>
+
           <div className="border w-full border-[#474748] mt-10" />
         </div>
       )}

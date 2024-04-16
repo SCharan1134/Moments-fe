@@ -60,13 +60,13 @@ const SideNavbar = () => {
             <FaSearch />
             Search
           </button>
-          <button
+          {/* <button
             className="flex gap-2 items-center"
             onClick={() => navigate("/capsules")}
           >
             <IoIosTimer />
             Time Capsules
-          </button>
+          </button> */}
           <button
             className="flex gap-2 items-center"
             onClick={() => navigate("/messages")}
