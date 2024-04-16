@@ -20,6 +20,7 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
   const token = useSelector((state: any) => state.token);
   const { toast } = useToast();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [imagePreview, setImagePreview] = useState<any>(null);
   const [previewFiles, setPreviewFiles] = useState<File[]>([]);
 
   const handleSubmit = async (values: any) => {
@@ -31,10 +32,13 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
       const formData = new FormData();
       formData.append("userId", _id);
       formData.append("description", values.description);
+
       if (values.file) {
         for (const file of values.file) {
-          formData.append("moment", file);
-          formData.append("momentPath", file.name);
+          // formData.append("moment", file);
+          const imgUrl = await uploadImage(file);
+
+          formData.append("momentPath", imgUrl);
         }
       }
       // if (values.file) {
@@ -49,7 +53,7 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
@@ -64,6 +68,26 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
       console.error("Error posting moment:", error);
     }
   };
+
+  const uploadImage = async (e: any) => {
+    try {
+      const image = new FormData();
+      const cloudName = "duxz0nau4";
+      image.append("file", e);
+      image.append("cloud_name", "duxz0nau4");
+      image.append("upload_preset", "moments_moment");
+
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        image
+      );
+      console.log(response.data.url);
+      return response.data.url;
+    } catch (error) {
+      console.log("imageUploaderror", error);
+    }
+  };
+
   const handleCloseModal = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       onClose();

@@ -3,9 +3,13 @@ import MessageContainer from "@/components/shared/MessageContainer";
 
 const ChatPage = () => {
   return (
-    <div className="flex max-w-[1290px]">
-      <ChatSidebar />
-      <MessageContainer />
+    <div className="flex  w-full bg-secondary text-white h-full overflow-clip">
+      <div className="my-5 h-[635px]">
+        <ChatSidebar />
+      </div>
+      <div className="my-5 h-[635px]">
+        <MessageContainer />
+      </div>
     </div>
   );
 };

@@ -25,7 +25,7 @@ const SideNavbar = () => {
         >
           <Avatar className="z-10">
             <AvatarImage
-              src={`http://localhost:3001/avatar/${user.avatarPath}`}
+              src={user.avatarPath}
               className="rounded-full h-20 w-20 "
             />
             <AvatarFallback className="rounded-full bg-slate-400  p-2">
@@ -62,7 +62,7 @@ const SideNavbar = () => {
           </button>
           <button
             className="flex gap-2 items-center"
-            onClick={() => navigate("/messages")}
+            onClick={() => navigate("/capsules")}
           >
             <IoIosTimer />
             Time Capsules

@@ -75,9 +75,7 @@ const FriendRequest = ({ friendId }: any) => {
     <div className="flex w-full justify-between items-center px-2 py-1 gap-1">
       <div className="flex items-start gap-3">
         <Avatar>
-          <AvatarImage
-            src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}
-          />
+          <AvatarImage src={friendData?.avatarPath} />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>

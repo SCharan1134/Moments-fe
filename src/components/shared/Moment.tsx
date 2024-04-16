@@ -280,7 +280,7 @@ const Moment: React.FC<MomentProps> = ({
   };
 
   return (
-    <div className="py-4 px-4 border border-[#474748]  rounded-2xl bg-moment w-[500px]  ">
+    <div className="py-4 px-4   rounded-2xl bg-secondary w-[500px]  ">
       {isloading ? (
         <div>Loading</div>
       ) : (
@@ -291,9 +291,7 @@ const Moment: React.FC<MomentProps> = ({
               onClick={() => navigate(`/profile/${friendData?._id}`)}
             >
               <Avatar>
-                <AvatarImage
-                  src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}
-                />
+                <AvatarImage src={friendData?.avatarPath} />
                 <AvatarFallback>
                   <img src="https://github.com/shadcn.png" />
                 </AvatarFallback>
@@ -357,7 +355,7 @@ const Moment: React.FC<MomentProps> = ({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="mt-2">
+          <div className="mt-3">
             {(momentsLength as number) > 1 ? (
               <div>
                 <Carousel setApi={setApi} className="w-[420px] h-[420px]">
@@ -376,7 +374,7 @@ const Moment: React.FC<MomentProps> = ({
                                     className="rounded-lg max-w-[420px] h-[420px] "
                                   >
                                     <source
-                                      src={`http://localhost:3001/moments/${momentPath?.[index]}`}
+                                      src={momentPath?.[index]}
                                       type="video/mp4"
                                     />
                                     Your browser does not support the video tag.
@@ -385,7 +383,7 @@ const Moment: React.FC<MomentProps> = ({
                               ) : (
                                 // If it's an image, render an <img> tag
                                 <img
-                                  src={`http://localhost:3001/moments/${momentPath?.[index]}`}
+                                  src={momentPath?.[index]}
                                   className="rounded-lg w-[420px] h-[420px]"
                                 />
                               )}
@@ -407,22 +405,37 @@ const Moment: React.FC<MomentProps> = ({
                 <CardContent className="p-0">
                   {momentPath?.[0]?.split(".").pop() === "mp4" ? (
                     // If it's a video, render a <video> tag
-                    <video
-                      controls
-                      className="rounded-lg max-w-[420px] h-[420px]"
-                    >
-                      <source
-                        src={`http://localhost:3001/moments/${momentPath?.[0]}`}
-                        type="video/mp4"
-                      />
-                      Your browser does not support the video tag.
-                    </video>
+                    <div className="bg-white">
+                      <video
+                        controls
+                        className="rounded-lg max-w-[420px] h-[420px] border-none"
+                      >
+                        <source src={momentPath?.[0]} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      {/* <video
+                        controls
+                        className="rounded-lg max-w-[420px] h-[420px] absolute top-0 blur-md"
+                      >
+                        <source
+                          src={`http://localhost:3001/moments/${momentPath?.[0]}`}
+                          type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                      </video> */}
+                    </div>
                   ) : (
                     // If it's an image, render an <img> tag
-                    <img
-                      src={`http://localhost:3001/moments/${momentPath?.[0]}`}
-                      className="rounded-lg w-[420px] h-[420px]"
-                    />
+                    <div className="relative">
+                      <img
+                        src={momentPath?.[0]}
+                        className="rounded-lg w-[420px] h-[420px] object-fit bg-current"
+                      />
+                      {/* <img
+                        src={`http://localhost:3001/moments/${momentPath?.[0]}`}
+                        className="rounded-lg w-[420px] h-[420px] absolute top-0 blur-lg"
+                      /> */}
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -432,58 +445,84 @@ const Moment: React.FC<MomentProps> = ({
 
           <div className="flex items-end justify-between w-full mx-10 mt-5">
             <div className="flex flex-col">
-              <div
-                className="flex items-start justify-center gap-2 cursor-pointer rounded-full"
-                // onClick={patchLike}
-              >
-                {/* {isLiked ? <HeartFilledIcon /> : <HeartIcon />} */}
+              <div className="flex items-start justify-center gap-2 cursor-pointer rounded-full">
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "🔥" ? "bg-primary" : ""
-                  }`}
+                  className={`relative text-xl  transition-colors rounded-full h-8 w-8 `}
                   onClick={() => patchEmoji("🔥")}
                 >
-                  🔥
+                  <div>🔥</div>
+                  <div
+                    className={`absolute  top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "🔥" ? "blur-lg" : ""
+                    }`}
+                  >
+                    🔥
+                  </div>
                 </div>
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "💖" ? "bg-primary" : ""
-                  }`}
+                  className={`relative text-xl  rounded-full h-8 w-8`}
                   onClick={() => patchEmoji("💖")}
                 >
-                  💖
+                  <div>💖</div>
+                  <div
+                    className={`absolute  top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "💖" ? "blur-lg" : ""
+                    }`}
+                  >
+                    💖
+                  </div>
                 </div>
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "😂" ? "bg-primary" : ""
-                  }`}
+                  className={`relative text-xl  rounded-full h-8 w-8 `}
                   onClick={() => patchEmoji("😂")}
                 >
-                  😂
+                  <div className="z-10">😂</div>
+                  <div
+                    className={`absolute top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "😂" ? "blur-lg" : ""
+                    }`}
+                  >
+                    😂
+                  </div>
                 </div>
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "😍" ? "bg-primary" : ""
-                  }`}
+                  className={`text-xl relative rounded-full h-8 w-8 `}
                   onClick={() => patchEmoji("😍")}
                 >
-                  😍
+                  <div>😍</div>
+                  <div
+                    className={`absolute  top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "😍" ? "blur-lg" : ""
+                    }`}
+                  >
+                    😍
+                  </div>
                 </div>
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "🥲" ? "bg-primary" : ""
-                  }`}
+                  className={`text-xl relative rounded-full h-8 w-8 `}
                   onClick={() => patchEmoji("🥲")}
                 >
-                  🥲
+                  <div>🥲</div>
+                  <div
+                    className={`absolute  top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "🥲" ? "blur-lg" : ""
+                    }`}
+                  >
+                    🥲
+                  </div>
                 </div>
                 <div
-                  className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
-                    emojiReaction === "😠" ? "bg-primary" : ""
-                  }`}
+                  className={`text-xl relative rounded-full h-8 w-8 `}
                   onClick={() => patchEmoji("😠")}
                 >
-                  😠
+                  <div>😠</div>
+                  <div
+                    className={`absolute  top-0 left-0 hover:blur-lg transition-all ${
+                      emojiReaction === "😠" ? "blur-lg" : ""
+                    }`}
+                  >
+                    😠
+                  </div>
                 </div>
                 <Button
                   className="rounded-full p-1 h-8 w-8"
@@ -511,11 +550,17 @@ const Moment: React.FC<MomentProps> = ({
                 {emojiCount} Reacts
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-2 pr-5 text-white">
-              <ChatBubbleIcon onClick={() => navigate(`/moment/${postId}`)} />
+            <div
+              className="flex flex-col items-center justify-center gap-2 pr-5 text-white"
+              onClick={() => {
+                navigate(`/moment/${postId}`);
+              }}
+            >
+              <ChatBubbleIcon />
               <span className="font-medium">{commentCount} comments</span>
             </div>
           </div>
+          <div className="border w-full border-[#474748] mt-10" />
         </div>
       )}
     </div>

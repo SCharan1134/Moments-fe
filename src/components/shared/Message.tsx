@@ -50,13 +50,13 @@ const Message: React.FC<MessageProps> = ({ message, senderId, createdAt }) => {
     <div className={`flex ${chatClassName} w-full items-center p-2 gap-2`}>
       <div>
         <Avatar className="size-7">
-          <AvatarImage src={`http://localhost:3001/avatar/${profilePic}`} />
+          <AvatarImage src={profilePic} />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>
         </Avatar>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-end">
         <div
           className={`chat-bubble text-white ${bubbleBgColor} p-2 rounded-lg max-w-[500px] min-w-14 h-auto break-words`}
         >

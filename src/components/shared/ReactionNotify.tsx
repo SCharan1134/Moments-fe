@@ -24,7 +24,7 @@ const ReactionNotify: React.FC<ReactionNotifyProps> = ({
   return (
     <div className="flex items-center">
       <Avatar className="size-6 rounded-full">
-        <AvatarImage src={`http://localhost:3001/avatar/${avatarpath}`} />
+        <AvatarImage src={avatarpath} />
         <AvatarFallback>
           <img src="https://github.com/shadcn.png" />
         </AvatarFallback>

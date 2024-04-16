@@ -168,10 +168,10 @@ const ProfilePage = () => {
   }, [userId, token, isarchive]);
 
   return (
-    <div className="flex w-full items-start ">
+    <div className="flex w-full items-start bg-secondary text-white">
       {!isLoading ? (
         <>
-          <div className=" w-full pb-20 pt-10">
+          <div className=" w-full pb-20 pt-5">
             {isCurrent ? (
               <>
                 <MomentsWidget
@@ -190,58 +190,75 @@ const ProfilePage = () => {
               />
             )}
           </div>
-          <div className="w-[650px] w-max-[650px] border-l border-black sticky top-0 h-screen px-5 py-5">
-            <div className="rounded-2xl relative">
-              {user.avatarPath == " " ? (
-                <div className="rounded-2xl w-full h-72 flex items-center justify-center border-2">
-                  {" "}
-                  No profile pic
-                </div>
-              ) : (
-                <img
-                  src={`http://localhost:3001/avatar/${user.avatarPath}`}
-                  className="object-cover rounded-2xl w-full h-72"
-                />
-              )}
+          <div className="w-[650px] w-max-[650px]  rounded-xl sticky top-0 h-screen  mx-5">
+            <div className="border border-[#474748] bg-moment w-full h-full my-5 rounded-xl mb-20 p-5">
+              <div className="rounded-2xl relative">
+                {user.avatarPath == " " ? (
+                  <div className="rounded-2xl w-full h-72 flex items-center justify-center border border-[#474748]">
+                    {" "}
+                    No profile pic
+                  </div>
+                ) : (
+                  <img
+                    src={user.avatarPath}
+                    className="object-cover rounded-2xl w-full h-64"
+                  />
+                )}
 
-              <div className="absolute bottom-0 right-0 bg-secondary rounded-tl-2xl px-2 py-1 flex flex-col items-center">
-                <div className="font-semibold">{moments.length}</div>
-                <div>Moments</div>
+                <div className="absolute bottom-0 right-0  bg-moment rounded-tl-2xl px-2 py-1 flex flex-col items-center">
+                  <div className="font-semibold ">{moments.length}</div>
+                  <div>Moments</div>
+                </div>
               </div>
-            </div>
-            <div className="py-3 px-3 ">
-              <div className="flex flex-col">
-                <div className="text-2xl font-semibold">{user?.userName}</div>
-                <div
-                  className="flex items-center gap-2"
-                  onClick={() => setShowModal(true)}
-                >
-                  <div className="text-md">Friends</div>
-                  <div className="text-md font-semibold">
-                    {user.friends.length}
+              <div className="py-3 px-3 ">
+                <div className="flex flex-col">
+                  <div className="text-2xl font-semibold">{user?.userName}</div>
+                  <div
+                    className="flex items-center gap-2 mt-3 cursor-pointer"
+                    onClick={() => setShowModal(true)}
+                  >
+                    <div className="text-md font-light">Friends</div>
+                    <div className="text-md font-semibold">
+                      {user.friends.length}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {isCurrent && (
-                <Button
-                  onClick={() => {
-                    setIsarchive(!isarchive);
-                  }}
-                >
-                  {isarchive ? "view all" : "view archive"}
-                </Button>
-              )}
-              {!isCurrent && (
-                <div className="flex w-1/2 items-center justify-between">
-                  <Button onClick={handleFriendButton}>
-                    {isfriends
-                      ? "remove friend"
-                      : isRequest
-                      ? "remove request"
-                      : "add friend"}
+                {isCurrent && (
+                  <Button
+                    className="mt-3"
+                    onClick={() => {
+                      setIsarchive(!isarchive);
+                    }}
+                  >
+                    {isarchive ? "view all" : "view archive"}
                   </Button>
-                </div>
-              )}
+                )}
+                {!isCurrent && (
+                  <div className="flex w-1/2 items-center justify-between mt-3">
+                    <Button
+                      onClick={handleFriendButton}
+                      className="bg-[#303031] border border-[#59595A]"
+                    >
+                      {/* {isfriends
+                        ? "remove friend"
+                        : isRequest
+                        ? "remove request"
+                        : "add friend"} */}
+                      {isfriends
+                        ? "friends"
+                        : isRequest
+                        ? "remove request"
+                        : "add friend"}
+                    </Button>
+                    <Button
+                      // onClick={handleFriendButton}
+                      className="bg-[#303031] border border-[#59595A]"
+                    >
+                      Message
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           {showModal && (

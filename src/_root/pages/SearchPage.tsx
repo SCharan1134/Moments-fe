@@ -40,39 +40,39 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="m-5 px-5">
-      <div className="text-3xl font-semibold">Search Users</div>
-      <div className="px-5 py-5">
-        <input
-          className="border-b border-primary bg-secondary "
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={handleInputChange}
-        />
-        <div className="px-3 py-3">
-          {searchResults.length > 0 ? (
-            searchResults.map((result: any) => (
-              <div key={result._id}>
-                <div className="flex justify-between items-center p-2">
-                  <div
-                    className="flex gap-5 cursor-pointer"
-                    onClick={() => navigate(`/profile/${result._id}`)}
-                  >
-                    <Avatar>
-                      <AvatarImage
-                        src={`http://localhost:3001/avatar/${result.avatarPath}`}
-                      />
-                      <AvatarFallback>
-                        <img
-                          src="https://github.com/shadcn.png"
-                          alt="avatar fallback"
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>{result.userName}</div>
-                  </div>
-                  {/* {reacts ? (
+    <div className=" text-white bg-secondary w-full h-full">
+      <div className="px-5 py-10">
+        <div className="text-3xl font-semibold">Search </div>
+        <div className="px-5 py-5">
+          <input
+            className="bg-[#363536] border-[#494949] text-[#8B8B8B] py-2 px-5 w-[500px] rounded-lg focus:outline-none"
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={handleInputChange}
+          />
+          <div className="py-5">
+            {searchResults.length > 0 ? (
+              searchResults.map((result: any) => (
+                <div key={result._id}>
+                  <div className="flex justify-between items-center p-2 border w-[500px] my-3 rounded-xl border-[#474748] bg-[#19191A]">
+                    <div
+                      className="flex gap-5 cursor-pointer items-center w-full"
+                      onClick={() => navigate(`/profile/${result._id}`)}
+                    >
+                      <Avatar>
+                        <AvatarImage src={result.avatarPath} />
+
+                        <AvatarFallback>
+                          <img
+                            src="https://github.com/shadcn.png"
+                            alt="avatar fallback"
+                          />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>{result.userName}</div>
+                    </div>
+                    {/* {reacts ? (
                     <div>{emoji}</div>
                   ) : (
                     currentUser._id !== userId && (
@@ -85,12 +85,13 @@ const SearchPage = () => {
                       </Button>
                     )
                   )} */}
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div>No users found</div>
-          )}
+              ))
+            ) : (
+              <div>No users found</div>
+            )}
+          </div>
         </div>
       </div>
     </div>

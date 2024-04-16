@@ -143,7 +143,7 @@ const CustomComment: React.FC<CommentProps> = ({
     <div className="  flex flex-col items-center justify-between py-2  m-1 px-3">
       <div className="group flex w-full gap-3 items-center">
         <Avatar className="w-8 h-8">
-          <AvatarImage src={`http://localhost:3001/avatar/${avatarpath}`} />
+          <AvatarImage src={avatarpath} />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>

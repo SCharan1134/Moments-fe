@@ -89,7 +89,7 @@ const Conversation: React.FC<ConversationProps> = ({
           )}
           <div className="w-12 rounded-full">
             <img
-              src={`http://localhost:3001/avatar/${avatarpath}`}
+              src={avatarpath}
               alt="user avatar"
               className="w-12 h-12 object-cover rounded-full"
             />
@@ -98,12 +98,10 @@ const Conversation: React.FC<ConversationProps> = ({
 
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-primary">{username}</p>
+            <p className="font-bold">{username}</p>
           </div>
         </div>
       </div>
-
-      {!lastIdx && <div className="divider my-0 py-0 h-1" />}
     </>
   );
 };

@@ -1,9 +1,8 @@
 import Conversations from "./Conversations";
-import MessageContainer from "./MessageContainer";
 
 const ChatSidebar = () => {
   return (
-    <div className="border-r border-slate-500 p-4 flex flex-col">
+    <div className="border border-[#474748] p-4 flex flex-col h-full bg-moment rounded-xl  w-[273px]">
       <div className="text-2xl font-medium py-2">Messages</div>
       <Conversations />
     </div>

@@ -216,7 +216,7 @@ const MomentPage = () => {
                                       className="rounded-lg h-[600px]"
                                     >
                                       <source
-                                        src={`http://localhost:3001/moments/${moment.momentPath?.[index]}`}
+                                        src={moment.momentPath?.[index]}
                                         type="video/mp4"
                                       />
                                       Your browser does not support the video
@@ -226,7 +226,7 @@ const MomentPage = () => {
                                 ) : (
                                   // If it's an image, render an <img> tag
                                   <img
-                                    src={`http://localhost:3001/moments/${moment.momentPath?.[index]}`}
+                                    src={moment.momentPath?.[index]}
                                     className="rounded-lg"
                                   />
                                 )}
@@ -251,7 +251,7 @@ const MomentPage = () => {
                       <div className="flex justify-center items-center">
                         <video controls className="rounded-lg h-[600px]">
                           <source
-                            src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
+                            src={moment.momentPath?.[0]}
                             type="video/mp4"
                           />
                           Your browser does not support the video tag.
@@ -260,7 +260,7 @@ const MomentPage = () => {
                     ) : (
                       // If it's an image, render an <img> tag
                       <img
-                        src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
+                        src={moment.momentPath?.[0]}
                         className="rounded-lg "
                       />
                     )}
@@ -276,7 +276,7 @@ const MomentPage = () => {
                 >
                   <Avatar>
                     <AvatarImage
-                      src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}
+                      src={friendData?.avatarPath}
                       className="h-12 w-12"
                     />
                     <AvatarFallback>

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { setConversation } from "@/state";
 
 interface User {
   _id: string;
@@ -62,9 +61,9 @@ const MessageProfileBar = () => {
   }, [conversations]);
 
   return (
-    <div className="flex px-5 py-2 border-b-2 gap-5 bg-secondary">
+    <div className="flex px-5 py-2 border-b border-[#474748] gap-5 bg-moment items-center">
       <Avatar className="">
-        <AvatarImage src={`http://localhost:3001/avatar/${ruser.avatarPath}`} />
+        <AvatarImage src={ruser.avatarPath} />
         <AvatarFallback>
           <img src="https://github.com/shadcn.png" />
         </AvatarFallback>

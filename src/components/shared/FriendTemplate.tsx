@@ -97,7 +97,7 @@ const FriendTemplate: React.FC<FriendProps> = ({
         onClick={() => navigate(`/profile/${userId}`)}
       >
         <Avatar>
-          <AvatarImage src={`http://localhost:3001/avatar/${avatarPath}`} />
+          <AvatarImage src={avatarPath} />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" alt="avatar fallback" />
           </AvatarFallback>
