@@ -8,7 +8,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -77,12 +76,8 @@ const signinForm = () => {
   }
   return (
     <Form {...form}>
-      <div className="sm:w-420 flex justify-center items-center flex-col">
-        <h1 className="text-4xl font-bold">Moments</h1>
-        <h2 className="lg:text-xl font-semibold md:tex-lg pt-5 sm:pt-12">
-          Login to your account
-        </h2>
-
+      <div className="sm:w-[653px] h-full flex justify-between items-center flex-col p-10">
+        <div className="text-4xl font-bold text-primary">Moments</div>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5 w-full mt-4"
@@ -92,9 +87,13 @@ const signinForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input
+                    className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                    type="email"
+                    {...field}
+                    placeholder="Email or Username"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,30 +105,40 @@ const signinForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input
+                    className="bg-[#363536] border-[#494949] text-[#8B8B8B] "
+                    type="password"
+                    {...field}
+                    placeholder="password"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">
+          <Button type="submit" className="py-3 text-lg mt-5">
             {isloading ? (
               <div className="flex items-center justify-center gap-2">
                 <Loader />
               </div>
             ) : (
-              "Log in"
+              "LOGIN"
             )}
           </Button>
-          <p className="text-sm mt-2">
-            doesn't have an account?
-            <Link to="/sign-up" className="border">
-              Create Account
-            </Link>
-          </p>
         </form>
+        <div className="border w-full border-[#757575]" />
+        <div className="text-[#8b8b8b] text-lg">Forgot Password?</div>
+        <div className="border w-28 border-[#757575]" />
+        <p className="text-sm text-primary">
+          Don't have an account?{" "}
+          <Link
+            to="/sign-up"
+            className="border-b border-primary hover:border-0 transition-all cursor-pointer"
+          >
+            Create Account
+          </Link>
+        </p>
       </div>
     </Form>
   );

@@ -19,7 +19,7 @@ const PendingRequest = ({ friendId }: any) => {
   useEffect(() => {
     const fetchFriendData = async () => {
       try {
-        console.log("hi");
+        // console.log("hi");
         const response = await axios.get(
           `http://localhost:3001/users/${friendId}`,
           {
@@ -66,9 +66,7 @@ const PendingRequest = ({ friendId }: any) => {
     <div className="flex w-full justify-between items-center px-2 py-1 gap-2">
       <div className="flex items-start gap-3">
         <Avatar>
-          <AvatarImage
-            src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}
-          />
+          <AvatarImage src={friendData?.avatarPath} />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>

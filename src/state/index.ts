@@ -1,14 +1,18 @@
+import Moment from "@/components/shared/Moment";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface User {
   // Define your user object structure here
 }
 
+interface Conversation {}
+interface Message {}
+
 interface Moment {
   userId: string;
   description?: string;
-  momentPath?: string;
-  likes: Map<string, boolean>;
+  momentPath?: string[];
+  emojis: Map<string, string>;
   visibility: "public" | "private" | "friends";
   comments: string[];
   createdAt: Date;
@@ -26,18 +30,39 @@ interface Memory {
   _id: string;
 }
 
+interface Comment {
+  avatarPath: string;
+  createdAt: Date;
+  description: string;
+  likes: Map<string, boolean>;
+  replies: [];
+  updatedAt: Date;
+  userId: string;
+  userName: string;
+  __v: 0;
+  _id: string;
+}
+
 interface AuthState {
   user: User | null;
+  conversation: Conversation | null;
   token: string | null;
+  moment: Moment | null;
   moments: Moment[];
+  comments: Comment[];
+  messages: Message[];
   memories: Memory[];
 }
 
 const initialState: AuthState = {
+  conversation: null,
   user: null,
   token: null,
+  moment: null,
   moments: [],
+  comments: [],
   memories: [],
+  messages: [],
 };
 
 export const authSlice = createSlice({
@@ -53,12 +78,37 @@ export const authSlice = createSlice({
       state.token = null;
       state.moments = [];
       state.memories = [];
+      state.conversation = null;
+      state.comments = [];
+      state.messages = [];
     },
     changeUserDetails: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
     },
     setMoments: (state, action: PayloadAction<{ moments: Moment[] }>) => {
       state.moments = action.payload.moments;
+    },
+    addMomment: (state, action: PayloadAction<{ moment: Moment }>) => {
+      state.moments.unshift(action.payload.moment);
+    },
+    setComments: (state, action: PayloadAction<{ comments: Comment[] }>) => {
+      state.comments = action.payload.comments;
+    },
+    setComment: (state, action: PayloadAction<{ comment: Comment }>) => {
+      const updatedComments = state.comments.map((comment) => {
+        if (comment._id === action.payload.comment._id)
+          return action.payload.comment;
+        return comment;
+      });
+      state.comments = updatedComments;
+    },
+    addComment: (state, action: PayloadAction<{ comment: Comment }>) => {
+      state.comments.unshift(action.payload.comment);
+    },
+    deleteCommentById: (state, action: PayloadAction<{ id: any }>) => {
+      state.comments = state.comments.filter(
+        (comment) => comment._id !== action.payload.id
+      );
     },
     setMoment: (state, action: PayloadAction<{ moment: Moment }>) => {
       const updatedMoments = state.moments.map((moment) => {
@@ -68,8 +118,14 @@ export const authSlice = createSlice({
       });
       state.moments = updatedMoments;
     },
+    setSingleMoment: (state, action: PayloadAction<{ moment: Moment }>) => {
+      state.moment = action.payload.moment;
+    },
     setMemories: (state, action: PayloadAction<{ memories: Memory[] }>) => {
       state.memories = action.payload.memories;
+    },
+    setMessages: (state, action: PayloadAction<{ messages: Message[] }>) => {
+      state.messages = action.payload.messages;
     },
     setMemory: (state, action: PayloadAction<{ memory: Memory }>) => {
       const updatedMoments = state.memories.map((memory) => {
@@ -79,6 +135,12 @@ export const authSlice = createSlice({
       });
       state.memories = updatedMoments;
     },
+    setConversation: (
+      state,
+      action: PayloadAction<{ conversation: Conversation | null }>
+    ) => {
+      state.conversation = action.payload.conversation;
+    },
   },
 });
 
@@ -87,8 +149,16 @@ export const {
   setLogout,
   changeUserDetails,
   setMoments,
+  setComments,
+  deleteCommentById,
+  addComment,
+  addMomment,
+  setComment,
   setMoment,
+  setSingleMoment,
   setMemories,
   setMemory,
+  setConversation,
+  setMessages,
 } = authSlice.actions;
 export default authSlice.reducer;

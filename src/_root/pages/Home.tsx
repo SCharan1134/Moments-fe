@@ -2,7 +2,7 @@ import MomentsWidget from "@/components/shared/MomentsWidget";
 import { useSelector } from "react-redux";
 import FriendSuggestionList from "@/components/shared/FriendSuggestionList";
 import { useEffect, useState } from "react";
-import MemoryWidget from "@/components/shared/MemoryWidget";
+import MainBar from "@/components/shared/MainBar";
 
 const Home: React.FC = () => {
   const user = useSelector((state: any) => state.user);
@@ -12,19 +12,19 @@ const Home: React.FC = () => {
     setRefreshKey((prevKey) => prevKey + 1); // Update refresh key
   }, [isFriend]);
   return (
-    <div className="flex w-full items-start">
-      <div className="w-full pb-20 px-10 pt-10">
-        <div className="flex w-full justify-between items-center pb-5">
-          <div className="text-xl font-bold">Feed</div>
+    <div className="relative flex w-full items-start bg-secondary">
+      <div className="w-full pt-5">
+        <div className="flex w-full justify-between items-center p-3 bg-moment rounded-xl border-[#474748] border mb-5">
+          <div className="text-xl font-bold text-white">Feed</div>
           <div className="flex justify-between items-center gap-5">
             <button
-              className={`${!isFriend ? "text-primary" : "text-gray-400"}`}
+              className={`${!isFriend ? "text-primary" : "text-white"}`}
               onClick={() => setIsFriend(false)}
             >
               all
             </button>
             <button
-              className={`${isFriend ? "text-primary" : "text-gray-400"}`}
+              className={`${isFriend ? "text-primary" : "text-white"}`}
               onClick={() => {
                 setIsFriend(true);
                 console.log(isFriend);
@@ -34,15 +34,16 @@ const Home: React.FC = () => {
             </button>
           </div>
         </div>
-        <MomentsWidget
-          userId={user._id}
-          isFriends={isFriend}
-          refreshKey={refreshKey} // Pass refresh key to MomentsWidget
-        />
+        <div className="pb-24">
+          <MomentsWidget
+            userId={user._id}
+            isFriends={isFriend}
+            refreshKey={refreshKey} // Pass refresh key to MomentsWidget
+          />
+        </div>
       </div>
-      <div className="w-[650px] border-l border-black sticky top-0 h-screen px-2">
-        <FriendSuggestionList />
-        {/* <MemoryWidget /> */}
+      <div className="sticky w-[650px] w-max-[650px] top-0 h-screen bg-secondary">
+        <MainBar />
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
   const getMoments = async () => {
     try {
       // if (userId) {
-      console.log(userId);
+      // console.log(userId);
       const response = await axios.get(
         `http://localhost:3001/moments/${userId}/feed`,
         {
@@ -128,8 +128,10 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
             momentPath={moment.momentPath}
             description={moment.description}
             visibility={moment.visibility}
-            likes={moment.likes}
             isArchive={moment.isArchive}
+            getArchive={getArchiveMoments}
+            comments={moment.comments}
+            emojis={moment.emojis}
           />
         ))
       ) : (

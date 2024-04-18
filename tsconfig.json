@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
+    "types": ["socket.io-client"],
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   darkMode: ["class"],
   content: [
@@ -18,11 +19,11 @@ export default {
     },
     extend: {
       colors: {
-        secondary: "#FFF8ED",
+        secondary: "#121212",
         primary: "#FF8080",
-        moment: "#FFF4E4",
+        moment: "#1B1B1D",
       },
     },
   },
-  plugins: [import("tailwindcss-animate")],
+  plugins: [import("tailwindcss-animate"), import("daisyui")],
 };

@@ -49,9 +49,7 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ MemoryUserId }) => {
           // onClick={() => navigate(`/profile/${friendData?._id}`)}
         >
           <Avatar>
-            <AvatarImage
-              src={`http://localhost:3001/avatar/${friendData?.avatarPath}`}
-            />
+            <AvatarImage src={friendData?.avatarPath} />
             <AvatarFallback>
               <img src="https://github.com/shadcn.png" />
             </AvatarFallback>

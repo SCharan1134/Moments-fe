@@ -8,7 +8,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,17 +15,12 @@ import { SignupValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
-import Modal from "@/components/shared/Modal";
 import { useToast } from "@/components/ui/use-toast";
 
 const SignupForm = () => {
   const { toast } = useToast();
-
   const isloading = false;
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const [userId, setUserId] = useState("");
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -47,12 +41,8 @@ const SignupForm = () => {
       );
       console.log("data posted", response.data);
       if (response.data) {
-        setUserId(response.data._id);
-        setShowModal(true);
-        toast({
-          duration: 2000,
-          description: response.data.message,
-        });
+        console.log(response.data.verificationCode);
+        navigate(`/verify/${response.data._id}`);
       }
     } catch (error: any) {
       toast({
@@ -63,59 +53,71 @@ const SignupForm = () => {
       console.error("error posting data", error);
     }
   }
-
-  const closeModal = () => {
-    setShowModal(false);
-    navigate("/sign-in");
-  };
   return (
     <>
       <Form {...form}>
-        <div className="sm:w-420 flex justify-center items-center flex-col">
-          <h1 className="text-4xl font-bold">Moments</h1>
-          <h2 className="lg:text-xl font-semibold md:tex-lg pt-5 sm:pt-12">
-            Create a new account
-          </h2>
-          <p className="mt-2">To post your moments enter your details</p>
+        <div className="sm:w-[653px] h-full flex justify-between items-center flex-col p-10">
+          <div className="text-4xl font-bold text-primary">Moments</div>
+          <div className="w-full flex justify-start flex-col gap-2">
+            <div className="text-white text-xl">Create Account</div>
+            <div className="text-white">
+              Share your moments with your friends
+            </div>
+          </div>
 
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-5 w-full mt-4"
+            className="flex flex-col gap-5 w-full"
           >
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>FirstName</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LastName</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex w-full justify-between gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        placeholder="FirstName"
+                        className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        placeholder="LastName"
+                        className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} />
+                    <Input
+                      type="email"
+                      {...field}
+                      placeholder="Email"
+                      className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,9 +128,13 @@ const SignupForm = () => {
               name="userName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>UserName</FormLabel>
                   <FormControl>
-                    <Input type="text" {...field} />
+                    <Input
+                      type="text"
+                      {...field}
+                      placeholder="UserName"
+                      className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,9 +145,13 @@ const SignupForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input
+                      type="password"
+                      {...field}
+                      placeholder="password"
+                      className="bg-[#363536] border-[#494949] text-[#8B8B8B]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -154,23 +164,38 @@ const SignupForm = () => {
                   <Loader />
                 </div>
               ) : (
-                "Sign up"
+                "Create Account"
               )}
             </Button>
-            <p className="text-sm mt-2">
-              Already have an account?
-              <Link to="/sign-in" className="border">
-                Login
-              </Link>
-            </p>
           </form>
+          <div className="border w-28 border-[#757575]" />
+
+          <p className="text-sm text-primary">
+            have an account?{" "}
+            <Link
+              to="/sign-in"
+              className="border-b border-primary hover:border-0 transition-all cursor-pointer"
+            >
+              Log in
+            </Link>
+          </p>
+          <p className="text-sm text-white font-light mt-2">
+            By signing up, you agree to our{" "}
+            <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+              Terms
+            </span>{" "}
+            ,
+            <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+              Privacy Policy
+            </span>{" "}
+            and
+            <span className="border-b border-white hover:border-0 transition-all cursor-pointer">
+              Cookies Policy{" "}
+            </span>
+            .
+          </p>
         </div>
       </Form>
-      {showModal && (
-        <Modal userId={userId} onClose={closeModal}>
-          <Button onClick={closeModal}>Close</Button>
-        </Modal>
-      )}
     </>
   );
 };

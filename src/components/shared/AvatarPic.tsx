@@ -7,10 +7,7 @@ const AvatarPic = () => {
   return (
     <div>
       <Avatar>
-        <AvatarImage
-          src={`http://localhost:3001/avatar/${avatarPath}`}
-          className="rounded-full h-10 w-10"
-        />
+        <AvatarImage src={avatarPath} className="rounded-full h-10 w-10" />
         <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400  p-2">
           {userName.substring(0, 2).toUpperCase()}
         </AvatarFallback>

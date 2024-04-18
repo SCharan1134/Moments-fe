@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface FriendProps {
@@ -16,7 +16,7 @@ interface FriendProps {
 
 const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
   const { toast } = useToast();
-  const { _id } = useSelector((state: any) => state.user);
+  const { _id, pendingFriends } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const [isSent, setIsSent] = useState(false);
   const navigate = useNavigate();
@@ -67,22 +67,29 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
       console.error("Error submitting form:", error);
     }
   };
+
+  useEffect(() => {
+    if (pendingFriends.includes(userid)) {
+      console.log("pending");
+    }
+  });
+
   return (
-    <div className="flex w-full justify-between items-center px-2 py-1">
+    <div className="flex w-full justify-between items-center px-2 py-1 m-2">
       <div
-        className="flex items-start gap-3 cursor-pointer"
+        className="flex items-center gap-3 cursor-pointer"
         onClick={() => navigate(`/profile/${friendId}`)}
       >
         <Avatar>
-          <AvatarImage src={`http://localhost:3001/avatar/${avatarpath}`} />
+          <AvatarImage src={avatarpath} className="object-cover h-12 w-12" />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>
         </Avatar>
-        <p>{userid}</p>
+        <p className="text-white">{userid}</p>
       </div>
-      <Button onClick={handleAddFriend}>
-        {isSent ? " sent" : "add Friend"}
+      <Button className="text-primary bg-inherit" onClick={handleAddFriend}>
+        {isSent ? " sent" : "Add Friend"}
       </Button>
     </div>
   );
