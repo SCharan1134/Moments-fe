@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReplyComment from "./ReplyComment";
 import { FiTrash2 } from "react-icons/fi";
+import { api } from "@/apis/apiGclient";
 
 interface CommentProps {
   commentId: string;
@@ -59,7 +60,7 @@ const CustomComment: React.FC<CommentProps> = ({
 
   const patchLike = async () => {
     const response = await axios.post(
-      `http://localhost:3001/comments/${commentId}/like`,
+      `${api}/comments/${commentId}/like`,
       { userId: loggedInUserId },
       {
         headers: {
@@ -81,15 +82,12 @@ const CustomComment: React.FC<CommentProps> = ({
 
   const fetchReplies = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/comments/replies/${commentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.get(`${api}/comments/replies/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       setReply(response.data);
       setIsViewReplies(true);
     } catch (err) {
@@ -99,14 +97,11 @@ const CustomComment: React.FC<CommentProps> = ({
 
   const getlikes = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/comments/${commentId}/cm`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/comments/${commentId}/cm`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data._id == commentId) {
         setLike(response.data.likes);
       }
@@ -117,14 +112,11 @@ const CustomComment: React.FC<CommentProps> = ({
 
   const deleteComment = async () => {
     try {
-      await axios.delete(
-        `http://localhost:3001/comments/${userId}/${commentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${api}/comments/${userId}/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       // console.log(response);
       dispatch(deleteCommentById({ id: commentId }));
     } catch (error) {}

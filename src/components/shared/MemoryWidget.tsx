@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { setMemories } from "@/state";
 import MemoryCard from "./MemoryCard";
+import { api } from "@/apis/apiGclient";
 
 interface MemoryWidgetProps {
   userId: string;
@@ -22,7 +23,7 @@ const MemoryWidget: React.FC<MemoryWidgetProps> = ({
   const [key, setKey] = useState(0);
 
   const getMoments = async () => {
-    const response = await axios.get(`http://localhost:3001/memories/all`, {
+    const response = await axios.get(`${api}/memories/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,14 +33,11 @@ const MemoryWidget: React.FC<MemoryWidgetProps> = ({
     dispatch(setMemories({ memories: response.data }));
   };
   const getUserMemories = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/memories/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${api}/memories/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response.data);
 
     dispatch(setMemories({ memories: response.data }));

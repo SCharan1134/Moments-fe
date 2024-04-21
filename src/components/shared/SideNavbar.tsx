@@ -35,7 +35,7 @@ const SideNavbar = () => {
           <div className="absolute blur-md">
             <Avatar>
               <AvatarImage
-                src={`http://localhost:3001/avatar/${user.avatarPath}`}
+                src={user.avatarPath}
                 className="rounded-full h-20 w-20 "
               />
               <AvatarFallback className="rounded-full bg-slate-400  p-2">

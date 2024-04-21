@@ -15,6 +15,7 @@ import { FaRegBell } from "react-icons/fa";
 import useListenReactions from "@/hooks/useListenReactions";
 import { useSocketContext } from "@/context/SocketContext";
 import ReactionNotify from "./ReactionNotify";
+import { api } from "@/apis/apiGclient";
 
 const Notification = () => {
   useListenReactions();
@@ -33,14 +34,11 @@ const Notification = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/users/${_id}/notification`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${api}/users/${_id}/notification`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.data.friendRequests) {
           setFriendRequests(response.data.friendRequests);
         }

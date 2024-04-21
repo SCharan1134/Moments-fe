@@ -15,6 +15,7 @@ import Loader from "@/components/shared/Loader";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const loginDetails = z.object({
   recievedverification: z
@@ -41,7 +42,7 @@ const VerifyForm = () => {
     try {
       console.log(values);
       const response = await axios.post(
-        `http://localhost:3001/auth/verify/${userId}`,
+        `${api}/auth/verify/${userId}`,
         values,
         {
           headers: { "Content-Type": "application/json" },

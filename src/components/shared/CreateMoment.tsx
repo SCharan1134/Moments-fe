@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useToast } from "../ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const validationSchema = Yup.object().shape({
   description: Yup.string().required("Description is required"),
@@ -48,7 +49,7 @@ const CreateMoment: React.FC<CreateMomentProps> = ({ onClose }) => {
       formData.append("visibility", values.visibility);
       console.log(...formData);
       const response = await axios.post(
-        "http://localhost:3001/moments/createmoment",
+        `${api}/moments/createmoment`,
         formData,
         {
           headers: {

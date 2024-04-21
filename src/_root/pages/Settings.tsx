@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { changeUserDetails } from "@/state";
 import { CgProfile } from "react-icons/cg";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { api } from "@/apis/apiGclient";
 
 const Settings: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Settings: React.FC = () => {
       console.log(...formData);
 
       const response = await axios.post(
-        `http://localhost:3001/users/updateuser/${user._id}`,
+        `${api}/users/updateuser/${user._id}`,
         formData,
         {
           headers: {

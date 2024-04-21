@@ -16,6 +16,7 @@ import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const SignupForm = () => {
   const { toast } = useToast();
@@ -35,10 +36,7 @@ const SignupForm = () => {
 
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/auth/register",
-        values
-      );
+      const response = await axios.post(`${api}/auth/register`, values);
       console.log("data posted", response.data);
       if (response.data) {
         console.log(response.data.verificationCode);

@@ -17,6 +17,7 @@ import axios from "axios";
 import { setLogin } from "@/state";
 import { useDispatch } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const loginDetails = z.object({
   email: z.string().email(),
@@ -43,13 +44,9 @@ const signinForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginDetails>) {
     try {
-      const loggedInResponse = await axios.post(
-        "http://localhost:3001/auth/login",
-        values,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const loggedInResponse = await axios.post(`${api}/auth/login`, values, {
+        headers: { "Content-Type": "application/json" },
+      });
       const loggedIn = loggedInResponse.data;
       if (loggedIn) {
         dispatch(

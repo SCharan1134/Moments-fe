@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { api } from "@/apis/apiGclient";
 
 interface MemoryCardProps {
   MemoryId?: string;
@@ -22,14 +23,11 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ MemoryUserId }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${MemoryUserId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/users/${MemoryUserId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriendData(response.data);
       console.log(friendData);
     } catch (error) {

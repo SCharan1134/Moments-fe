@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -15,7 +16,7 @@ const SearchPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:3001/users/search/user/${user._id}`,
+          `${api}/users/search/user/${user._id}`,
           { query: searchTerm },
           {
             headers: {

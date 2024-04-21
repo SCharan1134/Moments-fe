@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import { useSocketContext } from "@/context/SocketContext";
 import { setConversation, setMessages } from "@/state";
 import axios from "axios";
@@ -30,7 +31,7 @@ const Conversation: React.FC<ConversationProps> = ({
   const getConversation = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3001/messages/${id}/conversation`,
+        `${api}/messages/${id}/conversation`,
         {
           senderId: user._id,
         },
@@ -49,7 +50,7 @@ const Conversation: React.FC<ConversationProps> = ({
   const getMessages = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3001/messages/${id}`,
+        `${api}/messages/${id}`,
         {
           senderId: user._id,
         },

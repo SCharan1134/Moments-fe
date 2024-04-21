@@ -29,12 +29,12 @@ const RootLayout = () => {
     }
   }, [isCreateMomentOpen]);
   return (
-    <div className="w-full relative overflow-hidden">
-      <div className="sticky top-0 z-10 w-full bg-secondary">
+    <div className="w-full relative overflow-hidden bg-secondary text-white">
+      <div className="sticky top-0 z-10 w-full ">
         <TopNavbar openCreateMomentModal={openCreateMomentModal} />
       </div>
       <div className="h-screen flex">
-        <div className="w-[250px] flex-none bg-secondary">
+        <div className="w-[250px] flex-none ">
           <SideNavbar />
         </div>
         <div className="flex-grow overflow-y-auto scrollbar-hide h-full">

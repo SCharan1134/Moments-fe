@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Friend from "./Friend";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { api } from "@/apis/apiGclient";
 
 interface FriendData {
   _id: string;
@@ -19,7 +20,7 @@ const FriendSuggestionList = () => {
     const fetchFriends = async () => {
       try {
         const response = await axios.get<FriendData[]>(
-          `http://localhost:3001/users/random/${_id}`,
+          `${api}/users/random/${_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

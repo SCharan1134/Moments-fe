@@ -8,6 +8,7 @@ import data from "@emoji-mart/data";
 // import emojiIndex from "emoji-mart";
 import Picker from "@emoji-mart/react";
 import { useDispatch, useSelector } from "react-redux";
+import { api } from "@/apis/apiGclient";
 
 const CreateCommentSchema = Yup.object().shape({
   comment: Yup.string()
@@ -50,9 +51,8 @@ const CreateComment: React.FC<CreateCommentProps> = ({
       formData.append("description", values.comment);
       if (isReply) {
         // formData.append("commentId", commentId);
-        console.log(`http://localhost:3001/comments/${commentId}/reply`);
         const response = await axios.post(
-          `http://localhost:3001/comments/${commentId}/reply`,
+          `${api}/comments/${commentId}/reply`,
           formData,
           {
             headers: {
@@ -66,7 +66,7 @@ const CreateComment: React.FC<CreateCommentProps> = ({
       } else {
         // formData.append("momentId", "66041e490338021c6c9b2c61");
         const response = await axios.post(
-          `http://localhost:3001/comments/${mommentId}/create`,
+          `${api}/comments/${mommentId}/create`,
           formData,
           {
             headers: {

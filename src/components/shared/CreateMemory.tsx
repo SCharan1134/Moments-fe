@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 import { useSelector } from "react-redux";
 import { useToast } from "../ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const validationSchema = Yup.object().shape({
   file: Yup.string().required("Image is required"),
@@ -30,7 +31,7 @@ const CreateMemory: React.FC<CreateMemoryProps> = ({ onClose }) => {
       }
 
       const response = await axios.post(
-        "http://localhost:3001/memories/creatememory",
+        `${api}/memories/creatememory`,
         formData,
         {
           headers: {

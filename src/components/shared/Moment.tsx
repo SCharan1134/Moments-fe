@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { api as apiG } from "@/apis/apiGclient";
 import { useToast } from "../ui/use-toast";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -107,14 +108,11 @@ const Moment: React.FC<MomentProps> = ({
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${postUserId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${apiG}/users/${postUserId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriendData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -130,7 +128,7 @@ const Moment: React.FC<MomentProps> = ({
 
   const patchEmoji = async (emoji: any) => {
     const response = await axios.patch(
-      `http://localhost:3001/moments/${postId}/emoji`,
+      `${apiG}/moments/${postId}/emoji`,
       {
         userId: loggedInUserId,
         emojis: emoji,
@@ -148,15 +146,12 @@ const Moment: React.FC<MomentProps> = ({
 
   const deleteMoment = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3001/moments/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.delete(`${apiG}/moments/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       toast({
         duration: 2000,
         description: response.data.message,
@@ -173,7 +168,7 @@ const Moment: React.FC<MomentProps> = ({
       formData.append("userId", postUserId);
       formData.append("momentId", postId);
       const response = await axios.post(
-        `http://localhost:3001/moments/archive/add`,
+        `${apiG}/moments/archive/add`,
         formData,
         {
           headers: {
@@ -197,7 +192,7 @@ const Moment: React.FC<MomentProps> = ({
       formData.append("userId", postUserId);
       formData.append("momentId", postId);
       const response = await axios.post(
-        `http://localhost:3001/moments/archive/remove`,
+        `${apiG}/moments/archive/remove`,
         formData,
         {
           headers: {
@@ -223,7 +218,7 @@ const Moment: React.FC<MomentProps> = ({
       formData.append("userId", postUserId);
       formData.append("momentId", postId);
       const response = await axios.post(
-        `http://localhost:3001/moments/favorite/add`,
+        `${apiG}/moments/favorite/add`,
         formData,
         {
           headers: {
@@ -254,7 +249,7 @@ const Moment: React.FC<MomentProps> = ({
       formData.append("userId", postUserId);
       formData.append("momentId", postId);
       const response = await axios.post(
-        `http://localhost:3001/moments/favorite/remove`,
+        `${apiG}/moments/favorite/remove`,
         formData,
         {
           headers: {

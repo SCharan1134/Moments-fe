@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -24,7 +25,7 @@ const GalleryPage = () => {
       // if (userId) {
       // console.log(userId);
       const response = await axios.get(
-        `http://localhost:3001/moments/${user._id}/${user._id}/moments`,
+        `${api}/moments/${user._id}/${user._id}/moments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -84,14 +84,11 @@ const MomentPage = () => {
 
   const fetchMoment = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/moments/${momentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/moments/${momentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setSingleMoment({ moment: response.data }));
       fetchFriend();
       getComments();
@@ -103,14 +100,11 @@ const MomentPage = () => {
 
   const fetchFriend = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${moment.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/users/${moment.userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriendData(response.data);
     } catch (error) {
       console.error("Error fetching friend data:", error);
@@ -119,15 +113,12 @@ const MomentPage = () => {
 
   const deleteMoment = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3001/moments/${moment?._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.delete(`${api}/moments/${moment?._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       toast({
         duration: 2000,
         description: response.data.message,
@@ -141,15 +132,12 @@ const MomentPage = () => {
 
   const getComments = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/comments/${moment._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.get(`${api}/comments/${moment._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       // console.log(response.data);
       dispatch(setComments({ comments: response.data }));
     } catch (err) {
@@ -159,7 +147,7 @@ const MomentPage = () => {
 
   const patchEmoji = async (emoji: any) => {
     const response = await axios.patch(
-      `http://localhost:3001/moments/${moment._id}/emoji`,
+      `${api}/moments/${moment._id}/emoji`,
       {
         userId: loggedInUserId,
         emojis: emoji,
