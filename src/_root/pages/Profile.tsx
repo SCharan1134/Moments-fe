@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import FriendsModal from "@/components/shared/FriendsModal";
 import Modal from "@/components/shared/Modal";
 import MomentsWidget from "@/components/shared/MomentsWidget";
@@ -51,14 +52,11 @@ const ProfilePage = () => {
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `http://localhost:3001/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUser(response.data);
       setIsLoading(false);
       if (response.data.friends.includes(currentUser._id)) {
@@ -76,7 +74,7 @@ const ProfilePage = () => {
     try {
       if (!isRequest) {
         const response = await axios.patch(
-          `http://localhost:3001/friends/${currentUser._id}/${userId}`,
+          `${api}/friends/${currentUser._id}/${userId}`,
           {},
           {
             headers: {
@@ -93,7 +91,7 @@ const ProfilePage = () => {
         console.log("friend request sent", response);
       } else {
         const response = await axios.patch(
-          `http://localhost:3001/friends/remove/request/${currentUser._id}/${userId}`,
+          `${api}/friends/remove/request/${currentUser._id}/${userId}`,
           {},
           {
             headers: {
@@ -122,7 +120,7 @@ const ProfilePage = () => {
   const removeFriend = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/friends/remove/${currentUser._id}/${userId}`,
+        `${api}/friends/remove/${currentUser._id}/${userId}`,
         {},
         {
           headers: {
@@ -168,10 +166,10 @@ const ProfilePage = () => {
   }, [userId, token, isarchive]);
 
   return (
-    <div className="flex w-full items-start bg-secondary text-white">
+    <div className="lg:flex-row flex flex-col-reverse w-full items-start bg-secondary text-white">
       {!isLoading ? (
         <>
-          <div className=" w-full pb-20 pt-5">
+          <div className=" w-full lg:pb-20 pb-48 pt-5">
             {isCurrent ? (
               <>
                 <MomentsWidget
@@ -190,7 +188,7 @@ const ProfilePage = () => {
               />
             )}
           </div>
-          <div className="w-[650px] w-max-[650px]  rounded-xl sticky top-0 h-screen  mx-5">
+          <div className="lg:w-[650px] w-max-[650px] w-full rounded-xl lg:sticky top-0 lg:h-screen  lg:mx-5">
             <div className="border border-[#474748] bg-moment w-full h-full my-5 rounded-xl mb-20 p-5">
               <div className="rounded-2xl relative">
                 {user.avatarPath == " " ? (

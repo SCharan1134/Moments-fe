@@ -5,6 +5,7 @@ import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { api } from "@/apis/apiGclient";
 interface FriendProps {
   userId: string;
   avatarPath: string;
@@ -32,7 +33,7 @@ const FriendTemplate: React.FC<FriendProps> = ({
     try {
       if (!isRequest) {
         const response = await axios.patch(
-          `http://localhost:3001/friends/${currentUser._id}/${userId}`,
+          `${api}/friends/${currentUser._id}/${userId}`,
           {},
           {
             headers: {
@@ -49,7 +50,7 @@ const FriendTemplate: React.FC<FriendProps> = ({
         console.log("friend request sent", response);
       } else {
         const response = await axios.patch(
-          `http://localhost:3001/friends/remove/request/${currentUser._id}/${userId}`,
+          `${api}/friends/remove/request/${currentUser._id}/${userId}`,
           {},
           {
             headers: {

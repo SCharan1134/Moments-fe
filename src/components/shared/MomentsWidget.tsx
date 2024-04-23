@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setMoments } from "@/state";
 import Moment from "./Moment";
+import { api } from "@/apis/apiGclient";
 
 interface MomentsWidgetProps {
   userId: string;
@@ -30,14 +31,11 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
     try {
       // if (userId) {
       // console.log(userId);
-      const response = await axios.get(
-        `http://localhost:3001/moments/${userId}/feed`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/moments/${userId}/feed`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       // console.log(response.data);
 
       dispatch(setMoments({ moments: response.data }));
@@ -51,7 +49,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
     try {
       if (userId) {
         const response = await axios.get(
-          `http://localhost:3001/moments/${userId}/feed/friend`,
+          `${api}/moments/${userId}/feed/friend`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,14 +65,11 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
   };
 
   const getArchiveMoments = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/moments/${userId}/archive`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${api}/moments/${userId}/archive`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     // console.log(response);
 
     dispatch(setMoments({ moments: response.data }));
@@ -84,7 +79,7 @@ const MomentsWidget: React.FC<MomentsWidgetProps> = ({
     try {
       if (userId) {
         const response = await axios.get(
-          `http://localhost:3001/moments/${userId}/${user._id}/moments`,
+          `${api}/moments/${userId}/${user._id}/moments`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

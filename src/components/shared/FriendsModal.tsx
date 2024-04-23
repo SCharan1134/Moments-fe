@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import FriendTemplate from "./FriendTemplate";
+import { api } from "@/apis/apiGclient";
 
 interface ModalProps {
   children: ReactNode;
@@ -17,14 +18,11 @@ const FriendsModal: React.FC<ModalProps> = ({ userId, onClose }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${userId}/friends`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/users/${userId}/friends`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriends(response.data);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -34,7 +32,7 @@ const FriendsModal: React.FC<ModalProps> = ({ userId, onClose }) => {
   const searchFriends = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3001/users/${userId}/search/friends`,
+        `${api}/users/${userId}/search/friends`,
         { query: searchQuery },
         {
           headers: {

@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,7 +19,7 @@ const useGetMessages = (id: any) => {
     const getMessages = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:3001/messages/${id}`, {
+        const res = await axios.get(`${api}/messages/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

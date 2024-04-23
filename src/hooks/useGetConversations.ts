@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,14 +14,11 @@ const useGetConversations = () => {
     const getConversations = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `http://localhost:3001/users/${user._id}/friends`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${api}/users/${user._id}/friends`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         console.log(res.data);
         setConversations(res.data);
       } catch (error) {

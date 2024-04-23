@@ -3,6 +3,7 @@ import { extractTime } from "../../utils/extractTime";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { api } from "@/apis/apiGclient";
 // import useConversation from "../../zustand/useConversation";
 
 interface MessageProps {
@@ -32,7 +33,7 @@ const Message: React.FC<MessageProps> = ({ message, senderId, createdAt }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/users/${senderId}`, {
+        const res = await axios.get(`${api}/users/${senderId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

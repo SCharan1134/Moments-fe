@@ -3,6 +3,7 @@ import { BsSend } from "react-icons/bs";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "@/state";
+import { api } from "@/apis/apiGclient";
 
 const MessageInput = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const MessageInput = () => {
   const sendMessage = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/messages/send/${receiverid}`,
+        `${api}/messages/send/${receiverid}`,
         {
           message: message,
           senderId: user._id,

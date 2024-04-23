@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import FriendTemplate from "./FriendTemplate";
+import { api } from "@/apis/apiGclient";
 
 interface ModalProps {
   children: ReactNode;
@@ -17,14 +18,11 @@ const LikesModal: React.FC<ModalProps> = ({ momentId, onClose }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/moments/${momentId}/emojis`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/moments/${momentId}/emojis`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriends(response.data);
     } catch (error) {
       console.error("Error submitting form:", error);

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import useGetConversations from "../../hooks/useGetConversations";
 import Conversation from "./Conversation";
+import { api } from "@/apis/apiGclient";
 
 const Conversations = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +16,7 @@ const Conversations = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:3001/users/search/user/${user._id}`,
+          `${api}/users/search/user/${user._id}`,
           { query: searchTerm },
           {
             headers: {

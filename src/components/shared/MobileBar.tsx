@@ -8,57 +8,45 @@ import { IoMdSettings } from "react-icons/io";
 import { BiMessageSquareDetail } from "react-icons/bi";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { useState, useEffect } from "react";
 
-const SideNavbar = () => {
+const MobileBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.user);
+  const conversation = useSelector((state: any) => state.conversation);
   const pageLoc = location.pathname.substring(1);
+  const [isselected, setIsSelected] = useState(false);
+  useEffect(() => {
+    if (conversation != null) {
+      setIsSelected(true);
+    } else {
+      setIsSelected(false);
+    }
+    console.log(conversation);
+    console.log(isselected);
+  }, [conversation]);
   console.log("Current location:", location.pathname.substring(1));
 
   return (
-    <div className="lg:p-5 sm:p-3 w-full h-full pb-20">
-      <div className="bg-moment w-full h-full pt-5 rounded-xl border-[#474748] border">
-        <div
-          className="relative flex flex-col w-full items-center gap-2 cursor-pointer"
-          onClick={() => navigate(`/profile/${user._id}`)}
-        >
-          <Avatar className="z-10">
-            <AvatarImage
-              src={user.avatarPath}
-              className="rounded-full h-20 w-20 "
-            />
-            <AvatarFallback className="rounded-full bg-slate-400  p-2">
-              {user.userName.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="absolute blur-md">
-            <Avatar>
-              <AvatarImage
-                src={user.avatarPath}
-                className="rounded-full h-20 w-20 "
-              />
-              <AvatarFallback className="rounded-full bg-slate-400  p-2">
-                {user.userName.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="font-medium text-lg text-white">@{user.userName}</div>
-        </div>
-        <div className="text-white text-lg flex flex-col justify-center items-start gap-10 pl-10 py-5">
+    <div
+      className={`lg:p-5 sm:p-3 relative ${
+        pageLoc != "messages" ? "block" : "hidden"
+      }`}
+    >
+      <div className="bg-moment w-screen py-2 rounded-xl border-[#474748] border fixed bottom-0 left-1 mb-5 flex">
+        <div className="text-white text-lg flex w-screen justify-between items-center py-2 px-5">
           <button
             className="flex gap-2 items-center font-semibold"
             onClick={() => navigate("/home")}
           >
             <FiHome />
-            Home
           </button>
           <button
             className="flex gap-2 items-center"
             onClick={() => navigate("/search")}
           >
             <FaSearch />
-            Search
           </button>
           {/* <button
             className="flex gap-2 items-center"
@@ -72,26 +60,48 @@ const SideNavbar = () => {
             onClick={() => navigate("/messages")}
           >
             <BiMessageSquareDetail />
-            Messages
           </button>
           {/* <button
             className="flex gap-2 items-center"
             onClick={() => navigate("/gallery")}
           >
             <TfiGallery />
-            Gallery
           </button> */}
           <button
-            className="flex gap-2 items-center mt-14"
+            className="flex gap-2 items-center "
             onClick={() => navigate("/settings")}
           >
             <IoMdSettings />
-            Settings
           </button>
+          <div
+            className="relative flex  items-center gap-2 cursor-pointer"
+            onClick={() => navigate(`/profile/${user._id}`)}
+          >
+            <Avatar className="z-10">
+              <AvatarImage
+                src={user.avatarPath}
+                className="rounded-full h-8 w-8 "
+              />
+              <AvatarFallback className="rounded-full bg-slate-400  p-2">
+                {user.userName.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute blur-md">
+              <Avatar>
+                <AvatarImage
+                  src={user.avatarPath}
+                  className="rounded-full h-8 w-8 "
+                />
+                <AvatarFallback className="rounded-full bg-slate-400  p-2">
+                  {user.userName.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default SideNavbar;
+export default MobileBar;

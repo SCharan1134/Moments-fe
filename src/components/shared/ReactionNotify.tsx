@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useEffect } from "react";
+import { api } from "@/apis/apiGclient";
 
 interface ReactionNotifyProps {
   avatarpath: string;
@@ -22,7 +23,7 @@ const ReactionNotify: React.FC<ReactionNotifyProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center text-white">
       <Avatar className="size-6 rounded-full">
         <AvatarImage src={avatarpath} />
         <AvatarFallback>
@@ -40,10 +41,7 @@ const ReactionNotify: React.FC<ReactionNotifyProps> = ({
         </span>{" "}
         had {emoji} your moment{" "}
         <span onClick={() => navigate(`/moment/${momentId}`)}>
-          <img
-            className="h-8 w-8"
-            src={`http://localhost:3001/moments/${momentPath}`}
-          />
+          <img className="h-8 w-8" src={momentPath} />
         </span>
       </div>
     </div>

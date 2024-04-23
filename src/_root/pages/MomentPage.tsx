@@ -23,6 +23,7 @@ import Picker from "@emoji-mart/react";
 import { init } from "emoji-mart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { api as apiG } from "../../apis/apiGclient";
 import {
   Carousel,
   CarouselContent,
@@ -84,14 +85,11 @@ const MomentPage = () => {
 
   const fetchMoment = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/moments/${momentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${apiG}/moments/${momentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setSingleMoment({ moment: response.data }));
       fetchFriend();
       getComments();
@@ -103,14 +101,11 @@ const MomentPage = () => {
 
   const fetchFriend = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${moment.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${apiG}/users/${moment.userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFriendData(response.data);
     } catch (error) {
       console.error("Error fetching friend data:", error);
@@ -119,15 +114,12 @@ const MomentPage = () => {
 
   const deleteMoment = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3001/moments/${moment?._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.delete(`${apiG}/moments/${moment?._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       toast({
         duration: 2000,
         description: response.data.message,
@@ -141,15 +133,12 @@ const MomentPage = () => {
 
   const getComments = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/comments/${moment._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.get(`${apiG}/comments/${moment._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       // console.log(response.data);
       dispatch(setComments({ comments: response.data }));
     } catch (err) {
@@ -159,7 +148,7 @@ const MomentPage = () => {
 
   const patchEmoji = async (emoji: any) => {
     const response = await axios.patch(
-      `http://localhost:3001/moments/${moment._id}/emoji`,
+      `${apiG}/moments/${moment._id}/emoji`,
       {
         userId: loggedInUserId,
         emojis: emoji,
@@ -186,20 +175,68 @@ const MomentPage = () => {
 
   const createCommentKey = replyUsername || "default";
   return (
-    <div className="px-10 py-5   ">
+    <div className="lg:px-10 py-5   ">
       {loading ? (
         <>Loading</>
       ) : (
         <>
-          <div className="border border-primary flex h-[600px] rounded-xl overflow-hidden">
+          <div className="flex lg:flex-row flex-col h-screen rounded-xl overflow-hidden">
+            {/* user mobile */}
+            <div className="lg:hidden block">
+              <div className="flex w-full justify-between items-center pb-3">
+                <div
+                  className=" flex items-center gap-3 cursor-pointer"
+                  onClick={() => navigate(`/profile/${friendData?._id}`)}
+                >
+                  <Avatar>
+                    <AvatarImage
+                      src={friendData?.avatarPath}
+                      className="h-12 w-12"
+                    />
+                    <AvatarFallback>
+                      <img src="https://github.com/shadcn.png" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <p>{friendData?.userName}</p>
+                    <p className="text-xs">{moment?.visibility}</p>
+                  </div>
+                </div>
+                <div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <DotsVerticalIcon className="h-6 w-6" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-secondary py-5 px-3 flex flex-col gap-3 border border-black rounded-lg">
+                      <DropdownMenuItem
+                        className=" hover:text-primary"
+                        onClick={() => navigate(`/profile/${moment?.userId}`)}
+                      >
+                        go to profile
+                      </DropdownMenuItem>
+                      {loggedInUserId == moment?.userId && (
+                        <>
+                          <DropdownMenuItem
+                            className="hover:text-black text-red-600"
+                            onClick={deleteMoment}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </div>
+            {/* moment */}
             <div>
-              {/* <img
-                src={`http://localhost:3001/moments/${moment?.momentPath}`}
-                className="rouded-lg w-[630px] h-full object-cover"
-              /> */}
               {(momentsLength as number) > 1 ? (
-                <div className="flex items-center">
-                  <Carousel setApi={setApi} className="h-[600px] w-[480px]">
+                <div className="lg:flex flex-col items-center justify-center">
+                  <Carousel
+                    setApi={setApi}
+                    className="lg:h-[600px] lg:w-[480px] w-full h-[480px]"
+                  >
                     <CarouselContent>
                       {Array.from({ length: momentsLength as number }).map(
                         (_, index) => (
@@ -213,7 +250,7 @@ const MomentPage = () => {
                                   <div className="flex justify-center items-center">
                                     <video
                                       controls
-                                      className="rounded-lg h-[600px]"
+                                      className="rounded-lg lg:h-[600px] lg:w-[480px] w-full h-[480px]"
                                     >
                                       <source
                                         src={moment.momentPath?.[index]}
@@ -227,7 +264,7 @@ const MomentPage = () => {
                                   // If it's an image, render an <img> tag
                                   <img
                                     src={moment.momentPath?.[index]}
-                                    className="rounded-lg"
+                                    className="rounded-lg lg:h-[600px] lg:w-[480px] w-full h-[480px]"
                                   />
                                 )}
                               </CardContent>
@@ -245,11 +282,14 @@ const MomentPage = () => {
                 </div>
               ) : (
                 <Card>
-                  <CardContent className="p-0 h-[600px] w-[480px]">
+                  <CardContent className="p-0 lg:h-[600px] lg:w-[480px] w-full h-[480px]">
                     {moment.momentPath?.[0]?.split(".").pop() === "mp4" ? (
                       // If it's a video, render a <video> tag
                       <div className="flex justify-center items-center">
-                        <video controls className="rounded-lg h-[600px]">
+                        <video
+                          controls
+                          className="rounded-lg lg:h-[600px] lg:w-[480px] w-full h-[480px]"
+                        >
                           <source
                             src={moment.momentPath?.[0]}
                             type="video/mp4"
@@ -261,14 +301,15 @@ const MomentPage = () => {
                       // If it's an image, render an <img> tag
                       <img
                         src={moment.momentPath?.[0]}
-                        className="rounded-lg "
+                        className="rounded-lg lg:h-[600px] lg:w-[480px] w-full h-[480px]"
                       />
                     )}
                   </CardContent>
                 </Card>
               )}
             </div>
-            <div className="w-full h-full bg-secondary px-5 py-3">
+            {/* desktop user */}
+            <div className="lg:block hidden w-full h-full bg-secondary px-5 py-3">
               <div className="flex w-full justify-between items-center pb-3">
                 <div
                   className=" flex items-center gap-3 cursor-pointer"
@@ -430,6 +471,125 @@ const MomentPage = () => {
                 username={replyUsername}
                 setIsReply={setIsReply}
               />
+            </div>
+            {/* comment mobile */}
+            <div className="lg:hidden block ">
+              <div className="flex flex-col">
+                <div className="px-3 py-2">{moment?.description}</div>
+                <div className="w-full flex items-center justify-between gap-1">
+                  <div className="flex flex-col">
+                    <div
+                      className="font-semibold text-sm cursor-pointer pl-2 pt-2"
+                      onClick={() => setShowModal(true)}
+                    >
+                      {emojiCount} Reacts
+                    </div>
+                    <div className="flex items-center justify-center gap-2 cursor-pointer rounded-full">
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "🔥" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("🔥")}
+                      >
+                        🔥
+                      </div>
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "💖" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("💖")}
+                      >
+                        💖
+                      </div>
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "😂" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("😂")}
+                      >
+                        😂
+                      </div>
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "😍" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("😍")}
+                      >
+                        😍
+                      </div>
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "🥲" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("🥲")}
+                      >
+                        🥲
+                      </div>
+                      <div
+                        className={`text-xl hover:bg-primary transition-colors rounded-full h-8 w-8 ${
+                          emojiReaction === "😠" ? "bg-primary" : ""
+                        }`}
+                        onClick={() => patchEmoji("😠")}
+                      >
+                        😠
+                      </div>
+                      <Button
+                        className="rounded-full p-1 h-8 w-8"
+                        type="button"
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                      >
+                        +
+                      </Button>
+                      {showEmojiPicker && (
+                        <div
+                          className="absolute bottom-0 z-10 "
+                          ref={emojiPickerRef}
+                        >
+                          <Picker
+                            data={data}
+                            onEmojiSelect={(emoji: any) => {
+                              patchEmoji(emoji.native);
+                              setShowEmojiPicker(false);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <CreateComment
+                isReply={isReply}
+                key={createCommentKey}
+                userId={loggedInUserId}
+                commentId={commentid}
+                mommentId={moment._id}
+                username={replyUsername}
+                setIsReply={setIsReply}
+              />
+              <div className="">
+                {comments.length > 0 ? (
+                  comments.map((comment: any) => (
+                    <CustomComment
+                      key={comment._id}
+                      commentId={comment._id}
+                      avatarpath={comment.avatarPath}
+                      description={comment.description}
+                      userId={comment.userId}
+                      likes={comment.likes}
+                      replies={comment.replies}
+                      username={comment.userName}
+                      onReply={(username: string, commentid: string) => {
+                        setReplyUsername(username);
+                        setCommentid(commentid);
+                        setIsReply(true);
+                      }}
+                    />
+                  ))
+                ) : (
+                  <p>No comments to display.</p>
+                )}
+              </div>
             </div>
           </div>
           {showModal && (

@@ -1,10 +1,12 @@
 import MomentsWidget from "@/components/shared/MomentsWidget";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FriendSuggestionList from "@/components/shared/FriendSuggestionList";
 import { useEffect, useState } from "react";
 import MainBar from "@/components/shared/MainBar";
+import { setMoments } from "@/state";
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const [isFriend, setIsFriend] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -19,22 +21,25 @@ const Home: React.FC = () => {
           <div className="flex justify-between items-center gap-5">
             <button
               className={`${!isFriend ? "text-primary" : "text-white"}`}
-              onClick={() => setIsFriend(false)}
+              onClick={() => {
+                dispatch(setMoments({ moments: [] }));
+                setIsFriend(false);
+              }}
             >
               all
             </button>
             <button
               className={`${isFriend ? "text-primary" : "text-white"}`}
               onClick={() => {
+                dispatch(setMoments({ moments: [] }));
                 setIsFriend(true);
-                console.log(isFriend);
               }}
             >
               Friends
             </button>
           </div>
         </div>
-        <div className="pb-24">
+        <div className="lg:pb-24 pb-36">
           <MomentsWidget
             userId={user._id}
             isFriends={isFriend}
@@ -42,7 +47,7 @@ const Home: React.FC = () => {
           />
         </div>
       </div>
-      <div className="sticky w-[650px] w-max-[650px] top-0 h-screen bg-secondary">
+      <div className="hidden lg:block sticky w-[650px] w-max-[650px] top-0 h-screen bg-secondary">
         <MainBar />
       </div>
     </div>

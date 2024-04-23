@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -24,7 +25,7 @@ const GalleryPage = () => {
       // if (userId) {
       // console.log(userId);
       const response = await axios.get(
-        `http://localhost:3001/moments/${user._id}/${user._id}/moments`,
+        `${api}/moments/${user._id}/${user._id}/moments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +72,7 @@ const GalleryPage = () => {
                                 }
                               >
                                 <source
-                                  src={`http://localhost:3001/moments/${moment.momentPath?.[index]}`}
+                                  src={`${api}/moments/${moment.momentPath?.[index]}`}
                                   type="video/mp4"
                                 />
                                 Your browser does not support the video tag.
@@ -79,7 +80,7 @@ const GalleryPage = () => {
                             </div>
                           ) : (
                             <img
-                              src={`http://localhost:3001/moments/${moment.momentPath?.[index]}`}
+                              src={`${api}/moments/${moment.momentPath?.[index]}`}
                               className="rounded-lg w-[450px] h-[450px]"
                               onClick={() => navigate(`/moment/${moment._id}`)}
                             />
@@ -103,7 +104,7 @@ const GalleryPage = () => {
                       onClick={() => navigate(`/moment/${moment._id}`)}
                     >
                       <source
-                        src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
+                        src={`${api}/moments/${moment.momentPath?.[0]}`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
@@ -111,7 +112,7 @@ const GalleryPage = () => {
                   ) : (
                     // If it's an image, render an <img> tag
                     <img
-                      src={`http://localhost:3001/moments/${moment.momentPath?.[0]}`}
+                      src={`${api}/moments/${moment.momentPath?.[0]}`}
                       className="rounded-lg w-[450px] h-[450px]"
                       onClick={() => navigate(`/moment/${moment._id}`)}
                     />

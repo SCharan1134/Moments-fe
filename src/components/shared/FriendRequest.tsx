@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { api } from "@/apis/apiGclient";
 
 interface FriendData {
   _id: string;
@@ -19,14 +20,11 @@ const FriendRequest = ({ friendId }: any) => {
     const fetchFriendData = async () => {
       try {
         console.log("hi");
-        const response = await axios.get(
-          `http://localhost:3001/users/${friendId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${api}/users/${friendId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setFriendData(response.data);
       } catch (error) {
         console.error("Error fetching friend data:", error);
@@ -40,7 +38,7 @@ const FriendRequest = ({ friendId }: any) => {
   const acceptRequest = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/friends/request/${_id}/${friendId}`,
+        `${api}/friends/request/${_id}/${friendId}`,
         {},
         {
           headers: {
@@ -57,7 +55,7 @@ const FriendRequest = ({ friendId }: any) => {
   const removeRequest = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/friends/decline/request/${_id}/${friendId}`,
+        `${api}/friends/decline/request/${_id}/${friendId}`,
         {},
         {
           headers: {

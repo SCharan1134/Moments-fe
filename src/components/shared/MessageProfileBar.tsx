@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNavigate } from "react-router-dom";
+import { api } from "@/apis/apiGclient";
+import { ChevronLeft } from "lucide-react";
+import { setConversation } from "@/state";
 
 interface User {
   _id: string;
@@ -38,14 +41,11 @@ const MessageProfileBar = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/users/${receiverid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/users/${receiverid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setrUser(response.data);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -62,6 +62,14 @@ const MessageProfileBar = () => {
 
   return (
     <div className="flex px-5 py-2 border-b border-[#474748] gap-5 bg-moment items-center">
+      <div
+        className="hover:bg-moment bg-secondary"
+        onClick={() => {
+          dispatch(setConversation({ conversation: null }));
+        }}
+      >
+        <ChevronLeft />
+      </div>
       <Avatar className="">
         <AvatarImage src={ruser.avatarPath} />
         <AvatarFallback>

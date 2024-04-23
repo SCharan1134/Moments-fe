@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { ReactNode, useState } from "react";
 import { Button } from "../ui/button";
+import { api } from "@/apis/apiGclient";
 
 interface ModalProps {
   children: ReactNode;
@@ -14,12 +15,9 @@ const Modal: React.FC<ModalProps> = ({ userId, onClose }) => {
 
   const handleVerify = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3001/auth/verify/${userId}`,
-        {
-          recievedverification: verificationCode,
-        }
-      );
+      const response = await axios.post(`${api}/auth/verify/${userId}`, {
+        recievedverification: verificationCode,
+      });
       if (response.data.isValid) {
         console.log("verified succesfully");
         onClose();

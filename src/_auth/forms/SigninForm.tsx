@@ -17,6 +17,7 @@ import axios from "axios";
 import { setLogin } from "@/state";
 import { useDispatch } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
+import { api } from "@/apis/apiGclient";
 
 const loginDetails = z.object({
   email: z.string().email(),
@@ -43,13 +44,9 @@ const signinForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginDetails>) {
     try {
-      const loggedInResponse = await axios.post(
-        "http://localhost:3001/auth/login",
-        values,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const loggedInResponse = await axios.post(`${api}/auth/login`, values, {
+        headers: { "Content-Type": "application/json" },
+      });
       const loggedIn = loggedInResponse.data;
       if (loggedIn) {
         dispatch(
@@ -76,7 +73,7 @@ const signinForm = () => {
   }
   return (
     <Form {...form}>
-      <div className="sm:w-[653px] h-full flex justify-between items-center flex-col p-10">
+      <div className="w-full h-full flex justify-between items-center flex-col p-10">
         <div className="text-4xl font-bold text-primary">Moments</div>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -128,9 +125,9 @@ const signinForm = () => {
           </Button>
         </form>
         <div className="border w-full border-[#757575]" />
-        <div className="text-[#8b8b8b] text-lg">Forgot Password?</div>
+        <div className="text-[#8b8b8b] text-lg p-5">Forgot Password?</div>
         <div className="border w-28 border-[#757575]" />
-        <p className="text-sm text-primary">
+        <p className="text-sm text-primary p-3">
           Don't have an account?{" "}
           <Link
             to="/sign-up"

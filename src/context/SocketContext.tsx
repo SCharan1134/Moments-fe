@@ -1,3 +1,4 @@
+import { api } from "@/apis/apiGclient";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
 import io, { Socket } from "socket.io-client";
@@ -33,7 +34,7 @@ export const SocketContextProvider: React.FC = ({ children }) => {
     let socket: Socket | undefined;
     if (authUser) {
       // Connect to the socket server with the user ID as a query parameter
-      const socket = io("http://localhost:3001", {
+      const socket = io(`${api}`, {
         query: {
           userId: authUser._id,
         },

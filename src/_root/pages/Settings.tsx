@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { changeUserDetails } from "@/state";
 import { CgProfile } from "react-icons/cg";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { api } from "@/apis/apiGclient";
 
 const Settings: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Settings: React.FC = () => {
       console.log(...formData);
 
       const response = await axios.post(
-        `http://localhost:3001/users/updateuser/${user._id}`,
+        `${api}/users/updateuser/${user._id}`,
         formData,
         {
           headers: {
@@ -74,9 +75,10 @@ const Settings: React.FC = () => {
   const { avatarPath, userName } = useSelector((state: any) => state.user);
 
   return (
-    <div className=" bg-secondary h-full text-white">
-      <div className=" py-5 flex h-[675px]">
-        <div className="border border-[#474748] p-4 flex flex-col h-full bg-moment rounded-xl  w-[273px]">
+    <div className=" bg-secondary h-full text-white lg:mx-5 mx-2">
+      <div className="text-2xl font-semibold pt-2">Settings</div>
+      {/* <div className=" py-5 flex-col h-[675px]"> */}
+      {/* <div className="border border-[#474748] p-4 flex flex-col h-full bg-moment rounded-xl  w-[273px]">
           <div className="text-2xl font-semibold">Settings</div>
           <div className="flex flex-col py-5 px-3">
             <div className="text-xl flex items-center gap-3">
@@ -86,77 +88,77 @@ const Settings: React.FC = () => {
               Edit profile
             </div>
           </div>
-        </div>
-        <div className="mx-5 border w-full rounded-2xl border-[#474748] p-4 pr-10 bg-moment flex flex-col">
-          <h2 className="font-bold text-2xl mb-5">Edit Profile</h2>
-          <Formik
-            initialValues={{ userName: "", file: null }}
-            validationSchema={validationSchema}
-            onSubmit={(values: any, { resetForm }: any) => {
-              handleSubmit(values, { resetForm });
-            }}
-          >
-            {({ setFieldValue }) => (
-              <Form className="p-24">
-                <div className="w-full justify-between items-center border border-[#474748] rounded-xl mx-2 flex gap-10 cursor-pointer p-2 bg-[#363536] mb-5">
-                  <Avatar className="">
-                    {imagePreview === null ? (
-                      <AvatarImage
-                        src={avatarPath}
-                        className="rounded-full h-20 w-20 object-cover bg-white"
-                      />
-                    ) : (
-                      <AvatarImage
-                        src={imagePreview}
-                        className="rounded-full h-20 w-20 object-cover bg-white"
-                      />
-                    )}
+        </div> */}
+      <div className=" border w-full rounded-2xl border-[#474748] p-4 lg:pr-10 pr-0 bg-moment flex flex-col mt-5">
+        <h2 className="font-bold text-2xl mb-5">Edit Profile</h2>
+        <Formik
+          initialValues={{ userName: "", file: null }}
+          validationSchema={validationSchema}
+          onSubmit={(values: any, { resetForm }: any) => {
+            handleSubmit(values, { resetForm });
+          }}
+        >
+          {({ setFieldValue }) => (
+            <Form className="lg:p-24 p-2">
+              <div className="w-full justify-between items-center border border-[#474748] rounded-xl lg:mx-2 flex gap-10 cursor-pointer p-2 bg-[#363536] mb-5">
+                <Avatar className="">
+                  {imagePreview === null ? (
+                    <AvatarImage
+                      src={avatarPath}
+                      className="rounded-full h-10 w-10 object-cover bg-white"
+                    />
+                  ) : (
+                    <AvatarImage
+                      src={imagePreview}
+                      className="rounded-full h-20 w-20 object-cover bg-white"
+                    />
+                  )}
 
-                    <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400  p-2">
-                      {userName.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="file"
-                    name="file"
-                    className="block text-sm text-slate-500
+                  <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400  p-2">
+                    {userName.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="file"
+                  name="file"
+                  className="block text-sm text-slate-500
                                   file:mr-4 file:py-2 file:px-4
                                   file:rounded-xl file:border-0
                                   file:text-sm file:font-semibold
                                   file:bg-primary file:text-white
                                   hover:file:bg-red-400 marker:text-secondary"
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setImagePreview(
-                        URL.createObjectURL(event.currentTarget.files![0])
-                      );
-                      setFieldValue("file", event.currentTarget.files![0]);
-                    }}
-                  />
-                </div>
-                <div className="p-2 flex flex-col gap-5 items-end">
-                  <Field
-                    type="text"
-                    id="userName"
-                    name="userName"
-                    className="bg-[#363536] border-[#494949] text-[#8B8B8B] py-2 px-5 w-full rounded-lg focus:outline-none"
-                    placeholder="Username"
-                  />
-                  <button
-                    type="submit"
-                    className="w-52 bg-primary text-white py-2 px-4 rounded-md hover:bg-slate-400  transition-all"
-                  >
-                    Submit
-                  </button>
-                </div>
-                <div className="w-full flex items-end bg-secondary justify-end mr-10"></div>
-              </Form>
-            )}
-          </Formik>
-        </div>
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setImagePreview(
+                      URL.createObjectURL(event.currentTarget.files![0])
+                    );
+                    setFieldValue("file", event.currentTarget.files![0]);
+                  }}
+                />
+              </div>
+              <div className="p-2 flex flex-col gap-5 items-end">
+                <Field
+                  type="text"
+                  id="userName"
+                  name="userName"
+                  className="bg-[#363536] border-[#494949] text-[#8B8B8B] py-2 px-5 w-full rounded-lg focus:outline-none"
+                  placeholder="Username"
+                />
+                <button
+                  type="submit"
+                  className="w-52 bg-primary text-white py-2 px-4 rounded-md hover:bg-slate-400  transition-all"
+                >
+                  Submit
+                </button>
+              </div>
+              <div className="w-full flex items-end bg-secondary justify-end mr-10"></div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
+    // </div>
   );
 };
 
