@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import CreateMoment from "@/components/shared/CreateMoment";
 import { useEffect, useState } from "react";
+import MobileBar from "@/components/shared/MobileBar";
 // import CreateMemory from "@/components/shared/CreateMemory";
 
 const RootLayout = () => {
@@ -29,13 +30,18 @@ const RootLayout = () => {
     }
   }, [isCreateMomentOpen]);
   return (
-    <div className="w-full relative overflow-hidden bg-secondary text-white">
-      <div className="sticky top-0 z-10 w-full ">
+    <div className=" w-full relative overflow-hidden bg-secondary text-white lg:px-5 px-0">
+      <div className="sticky top-0 z-10 w-full  ">
         <TopNavbar openCreateMomentModal={openCreateMomentModal} />
       </div>
-      <div className="h-screen flex">
-        <div className="w-[250px] flex-none ">
+      <div className="h-screen lg:flex flex-none w-full">
+        <div className={`w-[250px] flex-none hidden lg:block`}>
           <SideNavbar />
+        </div>
+        <div
+          className={`w-full flex-none lg:hidden block sticky bottom-0 z-10`}
+        >
+          <MobileBar />
         </div>
         <div className="flex-grow overflow-y-auto scrollbar-hide h-full">
           <Outlet />

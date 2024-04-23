@@ -54,7 +54,7 @@ const SignupForm = () => {
   return (
     <>
       <Form {...form}>
-        <div className="sm:w-[653px] h-full flex justify-between items-center flex-col p-10">
+        <div className="w-full h-full flex justify-between items-center flex-col p-10">
           <div className="text-4xl font-bold text-primary">Moments</div>
           <div className="w-full flex justify-start flex-col gap-2">
             <div className="text-white text-xl">Create Account</div>
@@ -67,7 +67,7 @@ const SignupForm = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-5 w-full"
           >
-            <div className="flex w-full justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:gap-4 gap-5">
               <FormField
                 control={form.control}
                 name="firstName"
@@ -166,7 +166,7 @@ const SignupForm = () => {
               )}
             </Button>
           </form>
-          <div className="border w-28 border-[#757575]" />
+          <div className="border w-full border-[#757575]" />
 
           <p className="text-sm text-primary">
             have an account?{" "}

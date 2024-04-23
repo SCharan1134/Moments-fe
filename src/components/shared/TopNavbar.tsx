@@ -26,20 +26,22 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ openCreateMomentModal }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-full h-[70px] justify-between items-center px-3 py-5 ">
-      <div className="bg-moment flex w-full justify-between items-center px-10 py-2 rounded-xl border-[#474748] border">
+    <div className=" relative">
+      <div className=" top-5 right-1 bg-moment flex w-full justify-between items-center px-5 py-2 rounded-xl border-[#474748] border">
         <div
           onClick={() => navigate("/home")}
-          className=" cursor-pointer text-2xl font-bold text-primary"
+          className="cursor-pointer text-2xl font-bold text-primary"
         >
           Moments
         </div>
-        <div className="flex gap-10 items-center">
-          <div>
-            <Button onClick={openCreateMomentModal} className="px-3">
-              Create Moment
-            </Button>
-          </div>
+        <div className="flex gap-5 items-center">
+          <Button
+            onClick={openCreateMomentModal}
+            className="px-3 flex justify-between"
+          >
+            <span className="font-bold lg:hidden block">+</span>
+            <div className="hidden lg:block">Create Moment</div>
+          </Button>
           <div className="text-white">
             <Notification />
           </div>
@@ -47,7 +49,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ openCreateMomentModal }) => {
             <DropdownMenuTrigger>
               <AvatarPic />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-34 bg-white p-2 border border-black rounded-md px-5">
+            <DropdownMenuContent className="w-34 bg-moment text-white p-2 border border-[#474748] rounded-md px-2 ">
               <DropdownMenuLabel className="py-1">{userName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>

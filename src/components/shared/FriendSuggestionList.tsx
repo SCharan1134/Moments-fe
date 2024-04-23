@@ -3,6 +3,7 @@ import Friend from "./Friend";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { api } from "@/apis/apiGclient";
+import { Skeleton } from "../ui/skeleton";
 
 interface FriendData {
   _id: string;
@@ -14,11 +15,13 @@ const FriendSuggestionList = () => {
   const { _id } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [friends, setFriends] = useState<FriendData[]>([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get<FriendData[]>(
           `${api}/users/random/${_id}`,
           {
@@ -27,8 +30,8 @@ const FriendSuggestionList = () => {
             },
           }
         );
-        console.log(response.data);
         setFriends(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching friends:", error);
       }
@@ -41,14 +44,42 @@ const FriendSuggestionList = () => {
         Suggested Friends
       </div>
       <div className="w-full">
-        {friends.map((friend) => (
-          <Friend
-            key={friend._id}
-            userid={friend.userName}
-            avatarpath={friend.avatarPath}
-            friendId={friend._id}
-          />
-        ))}
+        {isLoading ? (
+          <div>
+            <div className="space-y-2 w-full flex gap-2 p-5">
+              <Skeleton className="h-12 w-12 bg-secondary rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-2 w-[250px] bg-secondary" />
+                <Skeleton className="h-1 w-[200px] bg-secondary" />
+              </div>
+            </div>
+            <div className="space-y-2 w-full flex gap-2 p-5">
+              <Skeleton className="h-12 w-12 bg-secondary rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-2 w-[250px] bg-secondary" />
+                <Skeleton className="h-1 w-[200px] bg-secondary" />
+              </div>
+            </div>
+            <div className="space-y-2 w-full flex gap-2 p-5">
+              <Skeleton className="h-12 w-12 bg-secondary rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-2 w-[250px] bg-secondary" />
+                <Skeleton className="h-1 w-[200px] bg-secondary" />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {friends.map((friend) => (
+              <Friend
+                key={friend._id}
+                userid={friend.userName}
+                avatarpath={friend.avatarPath}
+                friendId={friend._id}
+              />
+            ))}
+          </>
+        )}
       </div>
       {/* <div className="text-md font-semibold pb-2 text-gray-400 ml-4">
         See all

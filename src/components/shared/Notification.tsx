@@ -109,7 +109,7 @@ const Notification = () => {
           </div>
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-74 bg-secondary">
+      <DropdownMenuContent className="w-74 bg-secondary text-white">
         {reactions.length > 0 && (
           <>
             <DropdownMenuLabel>Reactions</DropdownMenuLabel>

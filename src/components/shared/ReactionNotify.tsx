@@ -23,7 +23,7 @@ const ReactionNotify: React.FC<ReactionNotifyProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center text-white">
       <Avatar className="size-6 rounded-full">
         <AvatarImage src={avatarpath} />
         <AvatarFallback>
@@ -41,7 +41,7 @@ const ReactionNotify: React.FC<ReactionNotifyProps> = ({
         </span>{" "}
         had {emoji} your moment{" "}
         <span onClick={() => navigate(`/moment/${momentId}`)}>
-          <img className="h-8 w-8" src={`${api}/moments/${momentPath}`} />
+          <img className="h-8 w-8" src={momentPath} />
         </span>
       </div>
     </div>

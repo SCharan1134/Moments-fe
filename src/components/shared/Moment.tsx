@@ -26,6 +26,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { Skeleton } from "../ui/skeleton";
 
 init({ data });
 
@@ -108,6 +109,7 @@ const Moment: React.FC<MomentProps> = ({
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${apiG}/users/${postUserId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -275,24 +277,37 @@ const Moment: React.FC<MomentProps> = ({
   };
 
   return (
-    <div className="py-4 px-4   rounded-2xl bg-secondary w-[500px]  ">
+    <div className="lg:p-4  rounded-2xl bg-secondary lg:w-[500px] w-full ">
       {isloading ? (
-        <div>Loading</div>
+        <div className="flex flex-col space-y-3 w-full justify-center items-start">
+          <div className="space-y-2 w-full flex gap-2 p-5">
+            <Skeleton className="h-6 w-6 bg-moment" />
+            <div className="space-y-2">
+              <Skeleton className="h-2 w-[250px] bg-moment" />
+              <Skeleton className="h-1 w-[200px] bg-moment" />
+            </div>
+          </div>
+          <Skeleton className="h-[420px] w-full rounded-xl bg-moment" />
+          <Skeleton className="h-4 w-[250px] bg-moment" />
+          <Skeleton className="h-2 w-[200px] bg-moment" />
+        </div>
       ) : (
-        <div className="flex flex-col items-center   ">
-          <div className="flex w-full items-center justify-between gap-3 ">
+        <div className="flex w-full flex-col items-center lg:px-1 px-2">
+          <div className="flex w-full items-center justify-between lg:gap-3 gap-1">
             <div
               className="flex items-center gap-3 cursor-pointer"
               onClick={() => navigate(`/profile/${friendData?._id}`)}
             >
-              <Avatar>
+              <Avatar className="h-8 w-8">
                 <AvatarImage src={friendData?.avatarPath} />
                 <AvatarFallback>
                   <img src="https://github.com/shadcn.png" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <p className="text-white">{friendData?.userName}</p>
+                <p className="text-white lg:text-lg text-sm">
+                  {friendData?.userName}
+                </p>
                 <p className="text-xs text-[#747271]">{visibility}</p>
               </div>
             </div>
@@ -300,7 +315,7 @@ const Moment: React.FC<MomentProps> = ({
               <DropdownMenuTrigger>
                 <DotsVerticalIcon className="h-6 w-6 text-white" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-secondary py-5 px-3 flex flex-col gap-3 border border-black rounded-lg">
+              <DropdownMenuContent className="bg-secondary text-white py-5 px-3 flex flex-col gap-3 border border-[#474748] rounded-lg">
                 {isfavorite ? (
                   <DropdownMenuItem
                     className="hover:text-primary"
@@ -350,10 +365,10 @@ const Moment: React.FC<MomentProps> = ({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="mt-3">
+          <div className="mt-3 w-full">
             {(momentsLength as number) > 1 ? (
               <div>
-                <Carousel setApi={setApi} className="w-[420px] h-[420px]">
+                <Carousel setApi={setApi}>
                   <CarouselContent>
                     {Array.from({ length: momentsLength as number }).map(
                       (_, index) => (
@@ -366,7 +381,7 @@ const Moment: React.FC<MomentProps> = ({
                                 <div className="flex justify-center items-center">
                                   <video
                                     controls
-                                    className="rounded-lg max-w-[420px] h-[420px] "
+                                    className="rounded-lg lg:w-[420px] lg:h-[420px] w-full h-[420px] bg-secondary object-contain "
                                   >
                                     <source
                                       src={momentPath?.[index]}
@@ -379,7 +394,7 @@ const Moment: React.FC<MomentProps> = ({
                                 // If it's an image, render an <img> tag
                                 <img
                                   src={momentPath?.[index]}
-                                  className="rounded-lg w-[420px] h-[420px]"
+                                  className="rounded-lg lg:w-[420px] lg:h-[420px] w-full h-[400px] bg-secondary object-contain"
                                 />
                               )}
                             </CardContent>
@@ -396,35 +411,29 @@ const Moment: React.FC<MomentProps> = ({
                 </div>
               </div>
             ) : (
-              <Card>
-                <CardContent className="p-0">
+              <Card className="w-full">
+                <CardContent className="p-0 border-none w-full ">
                   {momentPath?.[0]?.split(".").pop() === "mp4" ? (
                     // If it's a video, render a <video> tag
-                    <div className="bg-white">
+                    <div className="bg-secondary">
                       <video
                         controls
-                        className="rounded-lg max-w-[420px] h-[420px] border-none"
-                      >
-                        <source src={momentPath?.[0]} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                      {/* <video
-                        controls
-                        className="rounded-lg max-w-[420px] h-[420px] absolute top-0 blur-md"
+                        className="rounded-lg lg:w-[420px] lg:h-[420px] w-full h-[450px] bg-secondary object-contain"
                       >
                         <source
-                          src={`http://localhost:3001/moments/${momentPath?.[0]}`}
+                          src={momentPath?.[0]}
                           type="video/mp4"
+                          className=""
                         />
                         Your browser does not support the video tag.
-                      </video> */}
+                      </video>
                     </div>
                   ) : (
                     // If it's an image, render an <img> tag
-                    <div className="relative">
+                    <div className="relative w-full">
                       <img
                         src={momentPath?.[0]}
-                        className="rounded-lg w-[420px] h-[420px] object-fit bg-current"
+                        className="rounded-lg lg:w-[420px] lg:h-[420px] w-full h-[420px] bg-secondary object-contain bg-current"
                       />
                       {/* <img
                         src={`http://localhost:3001/moments/${momentPath?.[0]}`}
@@ -436,9 +445,11 @@ const Moment: React.FC<MomentProps> = ({
               </Card>
             )}
           </div>
-          <div className="w-full pl-5 text-white mt-1">{description}</div>
+          <div className="w-full lg:pl-5 pl-2 text-white mt-1">
+            {description}
+          </div>
 
-          <div className="flex items-end justify-between w-full mx-10 mt-5">
+          <div className="flex items-end justify-between w-full mx-10 lg:mt-5 mt-2">
             <div className="flex flex-col">
               <div className="flex items-start justify-center gap-2 cursor-pointer rounded-full">
                 <div
@@ -558,7 +569,7 @@ const Moment: React.FC<MomentProps> = ({
             </div>
           </div>
 
-          <div className="border w-full border-[#474748] mt-10" />
+          <div className="border w-full border-[#474748] mt-10 lg:block hidden" />
         </div>
       )}
     </div>

@@ -166,10 +166,10 @@ const ProfilePage = () => {
   }, [userId, token, isarchive]);
 
   return (
-    <div className="flex w-full items-start bg-secondary text-white">
+    <div className="lg:flex-row flex flex-col-reverse w-full items-start bg-secondary text-white">
       {!isLoading ? (
         <>
-          <div className=" w-full pb-20 pt-5">
+          <div className=" w-full lg:pb-20 pb-48 pt-5">
             {isCurrent ? (
               <>
                 <MomentsWidget
@@ -188,7 +188,7 @@ const ProfilePage = () => {
               />
             )}
           </div>
-          <div className="w-[650px] w-max-[650px]  rounded-xl sticky top-0 h-screen  mx-5">
+          <div className="lg:w-[650px] w-max-[650px] w-full rounded-xl lg:sticky top-0 lg:h-screen  lg:mx-5">
             <div className="border border-[#474748] bg-moment w-full h-full my-5 rounded-xl mb-20 p-5">
               <div className="rounded-2xl relative">
                 {user.avatarPath == " " ? (

@@ -7,9 +7,9 @@ const MessageContainer = () => {
   const conversation = useSelector((state: any) => state.conversation);
 
   return (
-    <div className="h-full w-full px-5 ">
+    <div className="h-full w-full ">
       {conversation !== null ? (
-        <div className="w-[970px] rounded-xl pt-1 border h-full flex flex-col justify-between border-[#474748] bg-moment">
+        <div className="lg:w-[910px] w-screen rounded-xl pt-1 border lg:h-full xs:h-[750px] h-[840px] flex flex-col justify-between border-[#474748] bg-moment">
           <div>
             <MessageProfileBar />
           </div>
