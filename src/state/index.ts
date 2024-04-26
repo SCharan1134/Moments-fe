@@ -5,7 +5,14 @@ interface User {
   // Define your user object structure here
 }
 
-interface Conversation {}
+interface Conversation {
+  lastMessage?: any;
+  _id: string;
+  participants: [];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface Message {}
 
 interface Moment {
@@ -48,6 +55,7 @@ interface AuthState {
   conversation: Conversation | null;
   token: string | null;
   moment: Moment | null;
+  conversations: Conversation[];
   moments: Moment[];
   comments: Comment[];
   messages: Message[];
@@ -55,10 +63,11 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  conversation: null,
   user: null,
   token: null,
   moment: null,
+  conversation: null,
+  conversations: [],
   moments: [],
   comments: [],
   memories: [],
@@ -76,9 +85,11 @@ export const authSlice = createSlice({
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+      state.conversation = null;
+      state.moment = null;
       state.moments = [];
       state.memories = [];
-      state.conversation = null;
+      state.conversations = [];
       state.comments = [];
       state.messages = [];
     },
@@ -141,6 +152,29 @@ export const authSlice = createSlice({
     ) => {
       state.conversation = action.payload.conversation;
     },
+    setConversations: (
+      state,
+      action: PayloadAction<{ conversations: Conversation[] }>
+    ) => {
+      state.conversations = action.payload.conversations;
+    },
+    setLastSeen: (
+      state,
+      action: PayloadAction<{ conversationId: string; lastMessage: any }>
+    ) => {
+      const { conversationId, lastMessage } = action.payload;
+      if (state.conversation?._id == conversationId) {
+        state.conversation.lastMessage = lastMessage;
+      }
+
+      const conversationToUpdate = state.conversations.find(
+        (conversation) => conversation._id === conversationId
+      );
+
+      if (conversationToUpdate) {
+        conversationToUpdate.lastMessage = lastMessage;
+      }
+    },
   },
 });
 
@@ -159,6 +193,8 @@ export const {
   setMemories,
   setMemory,
   setConversation,
+  setConversations,
   setMessages,
+  setLastSeen,
 } = authSlice.actions;
 export default authSlice.reducer;

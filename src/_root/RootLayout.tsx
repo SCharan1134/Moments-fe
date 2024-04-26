@@ -5,15 +5,15 @@ import { Toaster } from "@/components/ui/toaster";
 import CreateMoment from "@/components/shared/CreateMoment";
 import { useEffect, useState } from "react";
 import MobileBar from "@/components/shared/MobileBar";
+import useListenMessages from "@/hooks/useListenMessages";
 // import CreateMemory from "@/components/shared/CreateMemory";
 
 const RootLayout = () => {
   const [isCreateMomentOpen, setIsCreateMomentOpen] = useState(false);
-
+  useListenMessages();
   // Function to open the Create Moment modal
   const openCreateMomentModal = () => {
     setIsCreateMomentOpen(true);
-    console.log(isCreateMomentOpen);
   };
 
   // Function to close the Create Moment modal

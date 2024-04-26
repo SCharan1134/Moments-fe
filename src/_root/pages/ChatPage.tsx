@@ -12,8 +12,6 @@ const ChatPage = () => {
     } else {
       setIsSelected(false);
     }
-    console.log(conversation);
-    console.log(isselected);
   }, [conversation]);
   return (
     <div className="flex w-full bg-secondary text-white h-full overflow-clip ">

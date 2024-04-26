@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessages } from "@/state";
+import { setLastSeen, setMessages } from "@/state";
 import { api } from "@/apis/apiGclient";
 
 const MessageInput = () => {
@@ -13,12 +13,7 @@ const MessageInput = () => {
   const conversation = useSelector((state: any) => state.conversation);
   const messages = useSelector((state: any) => state.messages);
   const [message, setMessage] = useState("");
-  const receiverid =
-    conversation !== null
-      ? conversation.participants[0] == user._id
-        ? conversation.participants[1]
-        : conversation.participants[0]
-      : null;
+  const receiverid = conversation.participants[0]._id;
 
   const sendMessage = async () => {
     try {
@@ -36,6 +31,12 @@ const MessageInput = () => {
         }
       );
       dispatch(setMessages({ messages: [...messages, res.data] }));
+      dispatch(
+        setLastSeen({
+          conversationId: conversation._id,
+          lastMessage: { seen: false, text: message, sender: user._id },
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +55,7 @@ const MessageInput = () => {
         <input
           type="text"
           className="border text-sm rounded-lg block w-full p-2.5  bg-[#363536] border-[#494949] text-[#8B8B8B]"
-          placeholder="😊  Send a message"
+          placeholder="Send a message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />

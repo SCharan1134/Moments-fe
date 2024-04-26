@@ -125,7 +125,6 @@ const MomentPage = () => {
         description: response.data.message,
       });
       navigate(`/home`);
-      console.log(response.data);
     } catch (err) {
       console.error("Error deleting moment", err);
     }
