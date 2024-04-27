@@ -2,7 +2,9 @@ import Moment from "@/components/shared/Moment";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface User {
-  // Define your user object structure here
+  friendRequests?: string[];
+  friends?: string[];
+  pendingFriends?: string[];
 }
 
 interface Conversation {
@@ -93,6 +95,15 @@ export const authSlice = createSlice({
       state.comments = [];
       state.messages = [];
     },
+    addFriendRequest: (
+      state,
+      action: PayloadAction<{ friendrequest: string }>
+    ) => {
+      state.user?.friendRequests?.push(action.payload.friendrequest);
+    },
+    addFriend: (state, action: PayloadAction<{ friend: string }>) => {
+      state.user?.friends?.push(action.payload.friend);
+    },
     changeUserDetails: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
     },
@@ -181,6 +192,8 @@ export const authSlice = createSlice({
 export const {
   setLogin,
   setLogout,
+  addFriendRequest,
+  addFriend,
   changeUserDetails,
   setMoments,
   setComments,

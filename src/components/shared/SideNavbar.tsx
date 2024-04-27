@@ -14,7 +14,7 @@ const SideNavbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.user);
   const pageLoc = location.pathname.substring(1);
-  // console.log("Current location:", location.pathname.substring(1));
+  console.log("Current location:", pageLoc);
 
   return (
     <div className="lg:p-5 sm:p-3 w-full h-full pb-20">
