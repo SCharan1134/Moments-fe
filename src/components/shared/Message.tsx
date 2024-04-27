@@ -1,57 +1,44 @@
 import { useSelector } from "react-redux";
 import { extractTime } from "../../utils/extractTime";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { api } from "@/apis/apiGclient";
-// import useConversation from "../../zustand/useConversation";
 
 interface MessageProps {
   message: string;
   senderId: string;
   createdAt: any;
+  seen: boolean;
+  lastIdx: boolean;
 }
 
-interface UserData {
-  avatarPath: string;
-}
-
-const Message: React.FC<MessageProps> = ({ message, senderId, createdAt }) => {
+const Message: React.FC<MessageProps> = ({
+  message,
+  senderId,
+  createdAt,
+  seen,
+  lastIdx,
+}) => {
   const authUser = useSelector((state: any) => state.user);
-  //   const { selectedConversation } = useConversation();
+  const selectedConversation = useSelector((state: any) => state.conversation);
   const fromMe = senderId === authUser._id;
   const formattedTime = extractTime(createdAt);
   const chatClassName = fromMe ? "justify-end" : "justify-start";
-  const token = useSelector((state: any) => state.token);
-  const [user, setUser] = useState<UserData | null>();
-  const profilePic = fromMe ? authUser.avatarPath : user?.avatarPath;
-  //   const profilePic = fromMe
-  //     ? authUser.avatarPath
-  //     : selectedConversation?.avatarPath;
   const bubbleBgColor = fromMe ? "bg-primary" : "bg-gray-500";
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`${api}/users/${senderId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (senderId) getUser();
-  }, [senderId]);
+  const currentUser = senderId == authUser._id ? true : false;
 
   return (
-    <div className={`flex ${chatClassName} w-full items-center p-2 gap-2`}>
-      <div>
+    <div
+      className={`flex 
+       ${chatClassName} w-full  p-2 gap-2`}
+    >
+      <div className={`${currentUser && "hidden"}`}>
         <Avatar className="size-7">
-          <AvatarImage src={profilePic} />
+          <AvatarImage
+            src={
+              currentUser
+                ? selectedConversation.participants[0].avatarPath
+                : authUser.avatarPath
+            }
+          />
           <AvatarFallback>
             <img src="https://github.com/shadcn.png" />
           </AvatarFallback>
@@ -63,9 +50,28 @@ const Message: React.FC<MessageProps> = ({ message, senderId, createdAt }) => {
         >
           {message}
         </div>
-        <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-          {formattedTime}
+        <div
+          className={`opacity-50 text-xs flex gap-1 items-center ${
+            currentUser ? "flex-row-reverse " : ""
+          }`}
+        >
+          <p className="text-white"> {seen && "seen"}</p>
+          <p> {formattedTime}</p>
         </div>
+      </div>
+      <div className={`${!currentUser && "hidden"}`}>
+        <Avatar className="size-7">
+          <AvatarImage
+            src={
+              currentUser
+                ? selectedConversation.participants[0].avatarPath
+                : authUser.avatarPath
+            }
+          />
+          <AvatarFallback>
+            <img src="https://github.com/shadcn.png" />
+          </AvatarFallback>
+        </Avatar>
       </div>
     </div>
   );

@@ -23,10 +23,8 @@ const MobileBar = () => {
     } else {
       setIsSelected(false);
     }
-    console.log(conversation);
-    console.log(isselected);
   }, [conversation]);
-  console.log("Current location:", location.pathname.substring(1));
+  // console.log("Current location:", location.pathname.substring(1));
 
   return (
     <div

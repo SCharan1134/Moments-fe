@@ -1,64 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { api } from "@/apis/apiGclient";
 import { ChevronLeft } from "lucide-react";
 import { setConversation } from "@/state";
-
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  avatarPath: string;
-  friends: string[];
-}
 
 const MessageProfileBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useSelector((state: any) => state.token);
-  const user = useSelector((state: any) => state.user);
-  const conversations = useSelector((state: any) => state.conversation);
-  const [ruser, setrUser] = useState<User>({
-    _id: "",
-    firstName: "string",
-    lastName: "string",
-    userName: "",
-    email: "",
-    avatarPath: "",
-    friends: [],
-  });
-  const receiverid =
-    conversations !== null
-      ? conversations.participants[0] == user._id
-        ? conversations.participants[1]
-        : conversations.participants[0]
-      : null;
-
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get(`${api}/users/${receiverid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setrUser(response.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-
-    return () => {
-      // Reset conversation to null when the component unmounts
-    };
-  }, [conversations]);
+  const conversation = useSelector((state: any) => state.conversation);
 
   return (
     <div className="flex px-5 py-2 border-b border-[#474748] gap-5 bg-moment items-center">
@@ -71,7 +20,7 @@ const MessageProfileBar = () => {
         <ChevronLeft />
       </div>
       <Avatar className="">
-        <AvatarImage src={ruser.avatarPath} />
+        <AvatarImage src={conversation.participants[0].avatarPath} />
         <AvatarFallback>
           <img src="https://github.com/shadcn.png" />
         </AvatarFallback>
@@ -79,11 +28,11 @@ const MessageProfileBar = () => {
       <div
         className="font-semibold text-lg cursor-pointer"
         onClick={() => {
-          navigate(`/profile/${ruser._id}`);
+          navigate(`/profile/${conversation.participants[0]._id}`);
           //   dispatch(setConversation({ conversation: null }));
         }}
       >
-        {ruser.userName}
+        {conversation.participants[0].userName}
       </div>
     </div>
   );

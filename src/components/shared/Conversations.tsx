@@ -11,6 +11,7 @@ const Conversations = () => {
 
   const token = useSelector((state: any) => state.token);
   const user = useSelector((state: any) => state.user);
+  const conversations = useSelector((state: any) => state.conversations);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +42,7 @@ const Conversations = () => {
     setSearchTerm(event.target.value);
   };
 
-  const { loading, conversations } = useGetConversations();
+  useGetConversations();
   return (
     <div className="py-2 flex flex-col gap-1 overflow-auto">
       <div className="mb-3">
@@ -57,6 +58,7 @@ const Conversations = () => {
         {searchResults.length > 0
           ? searchResults.map((conversation: any, idx) => (
               <Conversation
+                userid={conversation._id}
                 key={conversation._id}
                 id={conversation._id}
                 username={conversation.userName}
@@ -64,20 +66,20 @@ const Conversations = () => {
                 lastIdx={idx === searchResults.length - 1}
               />
             ))
-          : conversations.map((conversation: any, idx) => (
+          : conversations.map((conversation: any, idx: any) => (
               <Conversation
                 key={conversation._id}
                 id={conversation._id}
-                username={conversation.userName}
-                avatarpath={conversation.avatarPath}
+                userid={conversation.participants[0]._id}
+                username={conversation.participants[0].userName}
+                avatarpath={conversation.participants[0].avatarPath}
+                lastmessage={conversation?.lastMessage?.text}
+                lastsender={conversation?.lastMessage?.sender}
+                lastseen={conversation?.lastMessage?.seen}
                 lastIdx={idx === conversations.length - 1}
               />
             ))}
       </div>
-
-      {loading ? (
-        <span className="loading loading-spinner mx-auto"></span>
-      ) : null}
     </div>
   );
 };

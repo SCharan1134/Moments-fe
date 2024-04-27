@@ -8,25 +8,32 @@ import { useDispatch, useSelector } from "react-redux";
 
 interface ConversationProps {
   id: string;
+  userid: string;
   avatarpath: string;
   username: string;
   lastIdx?: boolean;
+  lastmessage?: string;
+  lastsender?: string;
+  lastseen?: boolean;
 }
 
 const Conversation: React.FC<ConversationProps> = ({
   id,
+  userid,
   username,
   avatarpath,
-  lastIdx,
+  lastmessage,
+  lastsender,
+  lastseen,
 }) => {
   const dispatch = useDispatch();
   const token = useSelector((state: any) => state.token);
   const user = useSelector((state: any) => state.user);
   const selectedConversation = useSelector((state: any) => state.conversation);
   const isSelected = selectedConversation?._id === id;
-  // const isOnline = true; // Change this to your logic for online status
+  const isUser = lastsender !== null && lastsender == user._id ? true : false;
   const { onlineUsers } = useSocketContext();
-  const isOnline = onlineUsers.includes(id);
+  const isOnline = onlineUsers.includes(userid);
 
   const getConversation = async () => {
     try {
@@ -42,25 +49,6 @@ const Conversation: React.FC<ConversationProps> = ({
         }
       );
       dispatch(setConversation({ conversation: response.data }));
-      getMessages();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getMessages = async () => {
-    try {
-      const response = await axios.post(
-        `${api}/messages/${id}`,
-        {
-          senderId: user._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      dispatch(setMessages({ messages: response.data }));
     } catch (error) {
       console.log(error);
     }
@@ -70,15 +58,15 @@ const Conversation: React.FC<ConversationProps> = ({
     getConversation();
   };
 
-  useEffect(() => {
-    console.log(isOnline, "online");
-  }, []);
+  // useEffect(() => {
+  //   console.log(isOnline, "online");
+  // }, []);
 
   return (
     <>
       <div
         className={`flex gap-2 items-center hover:bg-moment rounded p-2 py-1 cursor-pointer
-				${isSelected ? "bg-sky-500" : ""}
+				${isSelected ? "bg-secondary rounded-lg " : ""}
 			`}
         onClick={handleClick}
       >
@@ -98,8 +86,25 @@ const Conversation: React.FC<ConversationProps> = ({
         </div>
 
         <div className="flex flex-col flex-1">
-          <div className="flex gap-3 justify-between">
+          <div className="flex flex-col justify-between">
             <p className="font-bold">{username}</p>
+            <>
+              {lastsender !== null && (
+                <div>
+                  {isUser ? (
+                    <p>you: {lastmessage}</p>
+                  ) : (
+                    <div>
+                      {lastseen ? (
+                        <p className="">{lastmessage}</p>
+                      ) : (
+                        <p className="text-primary">new unread message</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           </div>
         </div>
       </div>

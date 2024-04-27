@@ -23,7 +23,6 @@ const GalleryPage = () => {
   const getMoments = async () => {
     try {
       // if (userId) {
-      // console.log(userId);
       const response = await axios.get(
         `${api}/moments/${user._id}/${user._id}/moments`,
         {
@@ -32,7 +31,6 @@ const GalleryPage = () => {
           },
         }
       );
-      // console.log(response.data);
 
       dispatch(setMoments({ moments: response.data }));
       // }

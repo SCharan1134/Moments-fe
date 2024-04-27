@@ -1,10 +1,43 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MessageInput from "./MessageInput";
 import MessageProfileBar from "./MessageProfileBar";
 import Messages from "./Messages";
+import { useEffect } from "react";
+import { api } from "@/apis/apiGclient";
+import { setMessages } from "@/state";
+import axios from "axios";
 
 const MessageContainer = () => {
+  const dispatch = useDispatch();
+
+  const token = useSelector((state: any) => state.token);
+
+  const user = useSelector((state: any) => state.user);
+
   const conversation = useSelector((state: any) => state.conversation);
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const response = await axios.post(
+          `${api}/messages/${conversation.participants[0]._id}`,
+          {
+            senderId: user._id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(setMessages({ messages: response.data }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (conversation != null) {
+      getMessages();
+    }
+  }, [conversation]);
 
   return (
     <div className="h-full w-full ">

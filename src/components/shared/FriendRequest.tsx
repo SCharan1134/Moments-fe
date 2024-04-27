@@ -2,8 +2,9 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { api } from "@/apis/apiGclient";
+import { addFriend, changeUserDetails } from "@/state";
 
 interface FriendData {
   _id: string;
@@ -12,14 +13,15 @@ interface FriendData {
 }
 
 const FriendRequest = ({ friendId }: any) => {
+  const dispatch = useDispatch();
   const [friendData, setFriendData] = useState<FriendData>();
   const token = useSelector((state: any) => state.token);
+  const user = useSelector((state: any) => state.user);
   const { _id } = useSelector((state: any) => state.user);
 
   useEffect(() => {
     const fetchFriendData = async () => {
       try {
-        console.log("hi");
         const response = await axios.get(`${api}/users/${friendId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +49,8 @@ const FriendRequest = ({ friendId }: any) => {
           },
         }
       );
-      console.log("friend added", response);
+      console.log("friend added", response.data);
+      dispatch(changeUserDetails({ user: response.data }));
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -65,6 +68,7 @@ const FriendRequest = ({ friendId }: any) => {
         }
       );
       console.log("friend request removed", response);
+      dispatch(changeUserDetails({ user: response.data }));
     } catch (error) {
       console.error("Error submitting form:", error);
     }

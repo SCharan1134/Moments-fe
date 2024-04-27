@@ -4,9 +4,12 @@ import Modal from "@/components/shared/Modal";
 import MomentsWidget from "@/components/shared/MomentsWidget";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { changeUserDetails } from "@/state";
 import axios from "axios";
+import { useSocketContext } from "@/context/SocketContext";
+
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 interface User {
@@ -20,6 +23,7 @@ interface User {
 }
 
 const ProfilePage = () => {
+  const dispatch = useDispatch();
   const { userId } = useParams();
   const token = useSelector((state: any) => state.token);
 
@@ -59,12 +63,6 @@ const ProfilePage = () => {
       });
       setUser(response.data);
       setIsLoading(false);
-      if (response.data.friends.includes(currentUser._id)) {
-        setIsFriends(true);
-      }
-      if (response.data.friendRequests.includes(currentUser._id)) {
-        setIsRequest(true);
-      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -84,10 +82,9 @@ const ProfilePage = () => {
           }
         );
         setIsRequest(true);
-        toast({
-          duration: 2000,
-          description: response.data.message,
-        });
+        let updatedUser = { ...currentUser };
+        updatedUser.friendRequests = response.data.friendRequests;
+        dispatch(changeUserDetails({ user: updatedUser }));
         console.log("friend request sent", response);
       } else {
         const response = await axios.patch(
@@ -101,10 +98,11 @@ const ProfilePage = () => {
           }
         );
         setIsRequest(false);
-        toast({
-          duration: 2000,
-          description: response.data.message,
-        });
+        dispatch(changeUserDetails({ user: response.data }));
+        // toast({
+        //   duration: 2000,
+        //   description: response.data.message,
+        // });
         console.log("friend request removed", response);
       }
     } catch (error: any) {
@@ -133,8 +131,10 @@ const ProfilePage = () => {
         duration: 2000,
         description: response.data.message,
       });
+      dispatch(changeUserDetails({ user: response.data }));
       console.log("friend removed", response);
       setIsFriends(false);
+      setIsRequest(false);
     } catch (error: any) {
       toast({
         duration: 2000,
@@ -164,6 +164,30 @@ const ProfilePage = () => {
       setIsCurrent(false);
     }
   }, [userId, token, isarchive]);
+
+  const { socket } = useSocketContext();
+
+  useEffect(() => {
+    socket?.on("removeFriend", (friendid) => {
+      const updatedUser = { ...user };
+      updatedUser.friends = updatedUser.friends.filter(
+        (friendId: any) => friendId !== friendid
+      );
+      setIsFriends(false);
+      setIsRequest(false);
+      dispatch(changeUserDetails({ user: updatedUser }));
+    });
+    return () => socket?.off("removeFriend");
+  }, [socket]);
+
+  useEffect(() => {
+    if (currentUser.friends.includes(userId)) {
+      setIsFriends(true);
+    }
+    if (currentUser.pendingFriends.includes(userId)) {
+      setIsRequest(true);
+    }
+  }, [userId, token, isarchive, currentUser, socket]);
 
   return (
     <div className="lg:flex-row flex flex-col-reverse w-full items-start bg-secondary text-white">
@@ -216,9 +240,15 @@ const ProfilePage = () => {
                     onClick={() => setShowModal(true)}
                   >
                     <div className="text-md font-light">Friends</div>
-                    <div className="text-md font-semibold">
-                      {user.friends.length}
-                    </div>
+                    {isCurrent ? (
+                      <div className="text-md font-semibold">
+                        {currentUser.friends.length}
+                      </div>
+                    ) : (
+                      <div className="text-md font-semibold">
+                        {user.friends.length}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {isCurrent && (

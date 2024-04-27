@@ -4,12 +4,14 @@ import FriendSuggestionList from "@/components/shared/FriendSuggestionList";
 import { useEffect, useState } from "react";
 import MainBar from "@/components/shared/MainBar";
 import { setMoments } from "@/state";
+import useListenMoment from "@/hooks/useListenMoment";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const [isFriend, setIsFriend] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  useListenMoment();
   useEffect(() => {
     setRefreshKey((prevKey) => prevKey + 1); // Update refresh key
   }, [isFriend]);
