@@ -1,13 +1,14 @@
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Avatar } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/apis/apiGclient";
+import { addPendingRequest, changeUserDetails } from "@/state";
 
 interface FriendProps {
   userid: string;
@@ -16,8 +17,10 @@ interface FriendProps {
 }
 
 const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const { _id, pendingFriends } = useSelector((state: any) => state.user);
+  const user = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const [isSent, setIsSent] = useState(false);
   const navigate = useNavigate();
@@ -40,6 +43,7 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
           duration: 2000,
           description: response.data.message,
         });
+        dispatch(addPendingRequest({ pendingFriends: friendId }));
         console.log("friend request sent", response);
       } else {
         const response = await axios.patch(
@@ -57,6 +61,11 @@ const Friend: React.FC<FriendProps> = ({ userid, avatarpath, friendId }) => {
           duration: 2000,
           description: response.data.message,
         });
+        const updatedUser = { ...user };
+        updatedUser.pendingFriends = updatedUser.pendingFriends.filter(
+          (friendid: any) => friendid !== friendId
+        );
+        dispatch(changeUserDetails({ user: updatedUser }));
         console.log("friend request removed", response);
       }
     } catch (error: any) {

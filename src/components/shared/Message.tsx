@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { extractTime } from "../../utils/extractTime";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 
 interface MessageProps {
   message: string;
@@ -55,7 +56,17 @@ const Message: React.FC<MessageProps> = ({
             currentUser ? "flex-row-reverse " : ""
           }`}
         >
-          <p className="text-white"> {seen && "seen"}</p>
+          <p className="text-white">
+            {currentUser && (
+              <>
+                {seen ? (
+                  <CheckCircledIcon className="text-primary" />
+                ) : (
+                  <CheckCircledIcon className="text" />
+                )}
+              </>
+            )}
+          </p>
           <p> {formattedTime}</p>
         </div>
       </div>

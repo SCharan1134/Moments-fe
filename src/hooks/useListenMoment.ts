@@ -18,7 +18,9 @@ const useListenMoment = () => {
         dispatch(setMoments({ moments: [moment, ...moments] }));
       }
     });
-    return () => socket?.off("newMessage");
+    return () => {
+      socket?.off("newMessage");
+    };
   }, [socket, setMoments, moments]);
 };
 

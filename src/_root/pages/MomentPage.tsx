@@ -33,6 +33,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import LikesModal from "@/components/shared/LikesModal";
+import { useSocketContext } from "@/context/SocketContext";
 
 init({ data });
 
@@ -53,7 +54,9 @@ const MomentPage = () => {
   const comments = useSelector((state: any) => state.comments);
   const { toast } = useToast();
   const emojiReaction = moment.emojis[loggedInUserId];
-  const emojiCount = Object.keys(moment.emojis).length;
+  // const [emojiReaction, setEmojiReaction] = useState();
+  // const emojiCount = Object.keys(moment.emojis).length;
+  const [emojiCount, setEmojiCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [replyUsername, setReplyUsername] = useState<string>("");
   const [isReply, setIsReply] = useState(false);
@@ -65,6 +68,7 @@ const MomentPage = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const { socket } = useSocketContext();
 
   const closeModal = () => {
     setShowModal(false);
@@ -83,6 +87,27 @@ const MomentPage = () => {
     });
   }, [api]);
 
+  useEffect(() => {
+    socket?.on("newemoji", (updatedmoment: any) => {
+      if (moment._id == updatedmoment._id) {
+        setEmojiCount(Object.keys(updatedmoment.emojis).length);
+      }
+    });
+
+    return () => {
+      socket?.off("newemoji");
+    };
+  }, [socket, setEmojiCount, emojiCount, moment]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchMoment();
+    setLoading(false);
+    return () => {
+      dispatch(setComments({ comments: [] }));
+    };
+  }, []);
+
   const fetchMoment = async () => {
     try {
       const response = await axios.get(`${apiG}/moments/${momentId}`, {
@@ -94,6 +119,9 @@ const MomentPage = () => {
       fetchFriend();
       getComments();
       setMomentsLength(response.data.momentPath.length);
+      // setEmojiReaction(moment.emojis[loggedInUserId]);
+      // setEmojiCount(Object.keys(moment.emojis).length);
+      console.log("done");
     } catch (error) {
       console.error("Error fetching moment data:", error);
     }
@@ -162,15 +190,6 @@ const MomentPage = () => {
 
     dispatch(setSingleMoment({ moment: response.data }));
   };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchMoment();
-    setLoading(false);
-    return () => {
-      dispatch(setComments({ comments: [] }));
-    };
-  }, [momentId]);
 
   const createCommentKey = replyUsername || "default";
   return (

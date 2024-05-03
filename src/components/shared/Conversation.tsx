@@ -1,6 +1,8 @@
 import { api } from "@/apis/apiGclient";
 import { useSocketContext } from "@/context/SocketContext";
 import { setConversation, setMessages } from "@/state";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+
 import axios from "axios";
 import React, { useEffect } from "react";
 // import { ConversationType } from "../../types";
@@ -77,11 +79,20 @@ const Conversation: React.FC<ConversationProps> = ({
             </div>
           )}
           <div className="w-12 rounded-full">
-            <img
+            {/* <img
               src={avatarpath}
               alt="user avatar"
               className="w-12 h-12 object-cover rounded-full"
-            />
+            /> */}
+            <Avatar>
+              <AvatarImage
+                src={avatarpath}
+                className="rounded-full h-10 w-10"
+              />
+              <AvatarFallback className="rounded-full h-10 w-10 bg-slate-400  p-2">
+                {username.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
           </div>
         </div>
 

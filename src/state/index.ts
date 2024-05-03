@@ -17,6 +17,9 @@ interface Conversation {
 
 interface Message {}
 
+interface Notification {}
+interface NewNotification {}
+
 interface Moment {
   userId: string;
   description?: string;
@@ -62,6 +65,8 @@ interface AuthState {
   comments: Comment[];
   messages: Message[];
   memories: Memory[];
+  notifications: Notification[];
+  newNotifications: Notification[];
 }
 
 const initialState: AuthState = {
@@ -74,6 +79,8 @@ const initialState: AuthState = {
   comments: [],
   memories: [],
   messages: [],
+  notifications: [],
+  newNotifications: [],
 };
 
 export const authSlice = createSlice({
@@ -94,12 +101,19 @@ export const authSlice = createSlice({
       state.conversations = [];
       state.comments = [];
       state.messages = [];
+      state.notifications = [];
     },
     addFriendRequest: (
       state,
       action: PayloadAction<{ friendrequest: string }>
     ) => {
       state.user?.friendRequests?.push(action.payload.friendrequest);
+    },
+    addPendingRequest: (
+      state,
+      action: PayloadAction<{ pendingFriends: string }>
+    ) => {
+      state.user?.pendingFriends?.push(action.payload.pendingFriends);
     },
     addFriend: (state, action: PayloadAction<{ friend: string }>) => {
       state.user?.friends?.push(action.payload.friend);
@@ -109,6 +123,18 @@ export const authSlice = createSlice({
     },
     setMoments: (state, action: PayloadAction<{ moments: Moment[] }>) => {
       state.moments = action.payload.moments;
+    },
+    setNotifications: (
+      state,
+      action: PayloadAction<{ notifications: Notification[] }>
+    ) => {
+      state.notifications = action.payload.notifications;
+    },
+    setNewNotifications: (
+      state,
+      action: PayloadAction<{ notifications: Notification[] }>
+    ) => {
+      state.newNotifications = action.payload.notifications;
     },
     addMomment: (state, action: PayloadAction<{ moment: Moment }>) => {
       state.moments.unshift(action.payload.moment);
@@ -140,8 +166,20 @@ export const authSlice = createSlice({
       });
       state.moments = updatedMoments;
     },
+    setMomentEmoji: (
+      state,
+      action: PayloadAction<{ momentid: string; moment: Moment }>
+    ) => {
+      if (
+        state.moment !== null &&
+        state.moment._id == action.payload.momentid
+      ) {
+        state.moment == action.payload.moment;
+      }
+    },
     setSingleMoment: (state, action: PayloadAction<{ moment: Moment }>) => {
       state.moment = action.payload.moment;
+      console.log("done redux");
     },
     setMemories: (state, action: PayloadAction<{ memories: Memory[] }>) => {
       state.memories = action.payload.memories;
@@ -190,18 +228,22 @@ export const authSlice = createSlice({
 });
 
 export const {
+  addPendingRequest,
+  setNewNotifications,
   setLogin,
   setLogout,
   addFriendRequest,
   addFriend,
   changeUserDetails,
   setMoments,
+  setNotifications,
   setComments,
   deleteCommentById,
   addComment,
   addMomment,
   setComment,
   setMoment,
+  setMomentEmoji,
   setSingleMoment,
   setMemories,
   setMemory,

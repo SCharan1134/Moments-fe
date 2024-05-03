@@ -56,7 +56,9 @@ const useListenMessages = () => {
       // console.log(conversation == null);
     });
 
-    return () => socket?.off("newMessage");
+    return () => {
+      socket?.off("newMessage");
+    };
   }, [socket, setMessages, messages, conversation]);
 };
 export default useListenMessages;

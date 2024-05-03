@@ -18,7 +18,9 @@ const useListenReactions = () => {
       console.log(newReaction);
     });
 
-    return () => socket?.off("newMessage");
+    return () => {
+      socket?.off("newMessage");
+    };
   }, [socket, setMessages, messages]);
 };
 export default useListenReactions;

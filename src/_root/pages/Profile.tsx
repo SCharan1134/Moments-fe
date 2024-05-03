@@ -1,6 +1,5 @@
 import { api } from "@/apis/apiGclient";
 import FriendsModal from "@/components/shared/FriendsModal";
-import Modal from "@/components/shared/Modal";
 import MomentsWidget from "@/components/shared/MomentsWidget";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -177,7 +176,9 @@ const ProfilePage = () => {
       setIsRequest(false);
       dispatch(changeUserDetails({ user: updatedUser }));
     });
-    return () => socket?.off("removeFriend");
+    return () => {
+      socket?.off("removeFriend");
+    };
   }, [socket]);
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ChatBubbleIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { changeUserDetails, setMoment } from "@/state";
+import { changeUserDetails, setMoment, setSingleMoment } from "@/state";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -27,6 +27,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Skeleton } from "../ui/skeleton";
+import { useSocketContext } from "@/context/SocketContext";
+import { object } from "zod";
 
 init({ data });
 
@@ -67,7 +69,8 @@ const Moment: React.FC<MomentProps> = ({
   const isfavorite =
     favorites.find((favorite: any) => favorite === postId) !== undefined;
   const emojiReaction = emojis[loggedInUserId];
-  const emojiCount = Object.keys(emojis).length;
+  // const emojiCount = Object.keys(emojis).length;
+  const [emojiCount, setEmojiCount] = useState(Object.keys(emojis).length);
   const commentCount = comments?.length ?? 0;
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -144,6 +147,7 @@ const Moment: React.FC<MomentProps> = ({
     );
 
     dispatch(setMoment({ moment: response.data }));
+    setEmojiCount(Object.keys(response.data.emojis).length);
   };
 
   const deleteMoment = async () => {
@@ -275,6 +279,20 @@ const Moment: React.FC<MomentProps> = ({
       console.error("Error favorite moment", err);
     }
   };
+
+  const { socket } = useSocketContext();
+
+  useEffect(() => {
+    socket?.on("newemoji", (updatedmoment: any) => {
+      if (postId == updatedmoment._id) {
+        setEmojiCount(Object.keys(updatedmoment.emojis).length);
+      }
+    });
+
+    return () => {
+      socket?.off("newemoji");
+    };
+  }, [socket, setEmojiCount, emojiCount, postId, patchEmoji]);
 
   return (
     <div className="lg:p-4  rounded-2xl bg-secondary lg:w-[500px] w-full ">
@@ -542,7 +560,28 @@ const Moment: React.FC<MomentProps> = ({
               </div>
               <div
                 className="font-medium text-sm cursor-pointer text-white mt-1 ml-2"
-                onClick={() => navigate(`/moment/${postId}`)}
+                onClick={() => {
+                  const fetchMoment = async () => {
+                    try {
+                      const response = await axios.get(
+                        `${apiG}/moments/${postId}`,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        }
+                      );
+                      dispatch(setSingleMoment({ moment: response.data }));
+                      // setEmojiReaction(moment.emojis[loggedInUserId]);
+                      // setEmojiCount(Object.keys(moment.emojis).length);
+                      console.log("done");
+                    } catch (error) {
+                      console.error("Error fetching moment data:", error);
+                    }
+                  };
+                  fetchMoment();
+                  navigate(`/moment/${postId}`);
+                }}
               >
                 {emojiCount} Reacts
               </div>
@@ -561,6 +600,25 @@ const Moment: React.FC<MomentProps> = ({
             <div
               className="flex flex-col items-center justify-center gap-2 pr-5 text-white"
               onClick={() => {
+                // const fetchMoment = async () => {
+                //   try {
+                //     const response = await axios.get(
+                //       `${apiG}/moments/${postId}`,
+                //       {
+                //         headers: {
+                //           Authorization: `Bearer ${token}`,
+                //         },
+                //       }
+                //     );
+                //     dispatch(setSingleMoment({ moment: response.data }));
+                //     // setEmojiReaction(moment.emojis[loggedInUserId]);
+                //     // setEmojiCount(Object.keys(moment.emojis).length);
+                //     console.log("done");
+                //   } catch (error) {
+                //     console.error("Error fetching moment data:", error);
+                //   }
+                // };
+                // fetchMoment();
                 navigate(`/moment/${postId}`);
               }}
             >
